@@ -1,26 +1,27 @@
 #pragma once
 #include "gun.h"
 #include <list>
+#include <SFML/System/Vector2.hpp>
 
 class Player
 {
 private:
 	struct velocity
 	{
-		vector2
-			rotation
+		sf::Vector2f vector;
+		float rotation;
 	};
 
 	struct acceleration
 	{
-		vector2
-			rotation
+		sf::Vector2f vector;
+		float rotation;
 	};
 
 	struct position
 	{
-		vector2
-			rotation
+		sf::Vector2f vector;
+		float rotation;
 	};
 
 	int gold;
