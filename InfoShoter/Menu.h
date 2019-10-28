@@ -1,10 +1,9 @@
 #pragma once
 #include <TGUI/TGUI.hpp>
-#include <iostream>
-
+//#include <iostream>
+#include "MenuScreen.h"
 namespace Menu 
 {
-
 
 	void StartHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, tgui::Button::Ptr nextBtt, tgui::Button::Ptr stBtt);
 

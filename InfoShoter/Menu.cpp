@@ -2,11 +2,12 @@
 
 void Menu::StartHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, tgui::Button::Ptr nextBtt, tgui::Button::Ptr stBtt)
 {
-	
+	cScreen::goNext = true;
 }
 
 void Menu::NextHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, tgui::Button::Ptr nextBtt, tgui::Button::Ptr stBtt)
 {
+
 	username->setVisible(false);
 	nextBtt->setVisible(false);
 	listBox->setVisible(true);
@@ -15,14 +16,24 @@ void Menu::NextHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, 
 	stBtt->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));
 }
 
-void Menu::LoadMenuGUI(tgui::Gui & gui)
+void Menu::LoadMenuGUI(tgui::Gui &gui)
 {
+	auto titleLabel = tgui::Label::create();
+	titleLabel->setSize({ "66.67%", "12.5%" });
+	titleLabel->setPosition({ "32%", "16.67%" });
+	titleLabel->setText("InfoShoter");
+	titleLabel->setTextSize(70);
+	//titleLabel->setAutoSize(true);
+	gui.add(titleLabel);
+	titleLabel->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));
+	// Create the login button
+
 	auto editBoxUsername = tgui::EditBox::create();
 	editBoxUsername->setSize({ "66.67%", "12.5%" });
-	editBoxUsername->setPosition({ "16.67%", "16.67%" });
+	editBoxUsername->setPosition({ "16.67%", "50%" });
 	editBoxUsername->setDefaultText("Username");
 	gui.add(editBoxUsername);
-
+	editBoxUsername->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));
 	// Create the login button
 	
 
@@ -42,7 +53,7 @@ void Menu::LoadMenuGUI(tgui::Gui & gui)
 	nextButton->setSize({ "50%", "16.67%" });
 	nextButton->setPosition({ "25%", "70%" });
 	gui.add(nextButton,"NextnextButton");
-	
+	nextButton->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));
 
 
 	auto startButton = tgui::Button::create("Start");

@@ -1,11 +1,8 @@
-#include "MenuScreen.h"
+#include "Menu.h"
 #include <iostream>
 
 MenuScreen::MenuScreen(void)
 {
-	alpha_max = 3 * 255;
-	alpha_div = 3;
-	playing = false;
 }
 
 int MenuScreen::Run(sf::RenderWindow & window)
@@ -34,7 +31,12 @@ int MenuScreen::Run(sf::RenderWindow & window)
 			{
 				return (-1);
 			}
-
+			if (cScreen::goNext)
+			{
+				cScreen::goNext = false;
+				return 1;
+			}
+			if(cScreen::goPrevious){}
 			gui.handleEvent(Event);
 		}
 

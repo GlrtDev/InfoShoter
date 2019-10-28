@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cScreen.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="main.cpp" />
