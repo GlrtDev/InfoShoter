@@ -1,5 +1,10 @@
-#include <iostream>
 #include "GameScreen.h"
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window.hpp>
+#include "SFMLOrthogonalLayer.hpp"
+
+#include <tmxlite/Map.hpp>
 
 GameScreen::GameScreen(void)
 {
@@ -10,16 +15,19 @@ GameScreen::GameScreen(void)
 
 int GameScreen::Run(sf::RenderWindow & window)
 {
+	sf::View view;
+	view.setViewport(sf::FloatRect(0.f, 0.f, 1.5f, 2.f));
+	window.setView(view);
 	bool Running = true;
 	sf::Event Event;
 	tgui::Gui gui{ window };
+
+	tmx::Map map;
+	map.load("../assets/Level1TileMap.tmx");
 	
-	auto radioButton = tgui::RadioButton::create();
-	//radioButton->setRenderer(theme.getRenderer("RadioButton"));
-	radioButton->setPosition(20, 140);
-	radioButton->setText("Yep!");
-	radioButton->setSize(25, 25);
-	gui.add(radioButton);
+	MapLayer layerZero(map, 0);
+	MapLayer layerOne(map, 1);
+	sf::Clock globalClock;
 
 	while (Running)
 	{
@@ -31,10 +39,35 @@ int GameScreen::Run(sf::RenderWindow & window)
 			{
 				return (-1);
 			}
+
+			if (Event.type == sf::Event::KeyPressed)
+			{
+				if (Event.key.code == sf::Keyboard::W)
+				{
+					view.move(0.f, -10.f);
+				}
+				if (Event.key.code == sf::Keyboard::S)
+				{
+					view.move(0.f, 10.f);
+				}
+				if (Event.key.code == sf::Keyboard::A)
+				{
+					view.move(-10.f, 0.f);
+				}
+				if (Event.key.code == sf::Keyboard::D)
+				{
+					view.move(10.f, 0.f);
+				}
+			}
 			gui.handleEvent(Event);
 		}
+		sf::Time duration = globalClock.getElapsedTime();
+		layerZero.update(duration);
 
-		window.clear();
+		window.clear(sf::Color::Black);
+		window.setView(view);
+		window.draw(layerZero);
+		window.draw(layerOne);
 		gui.draw();
 		window.display();
 	}

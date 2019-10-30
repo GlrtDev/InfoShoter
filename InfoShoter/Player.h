@@ -6,28 +6,15 @@
 class Player
 {
 private:
-	struct velocity
-	{
-		sf::Vector2f vector;
-		float rotation;
-	};
-
-	struct acceleration
-	{
-		sf::Vector2f vector;
-		float rotation;
-	};
-
-	struct position
-	{
-		sf::Vector2f vector;
-		float rotation;
-	};
+	sf::Vector2f velocity; //sped
+	sf::Vector2f acceleration;
+	sf::Vector2f position;
 
 	int gold;
-	
 	int score;
 
 	std::list<Gun> Guns;
+
+public:
 
 };

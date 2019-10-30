@@ -1,5 +1,5 @@
 #include "Menu.h"
-
+#include <iostream>
 void Menu::StartHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, tgui::Button::Ptr nextBtt, tgui::Button::Ptr stBtt)
 {
 	cScreen::goNext = true;
@@ -18,6 +18,24 @@ void Menu::NextHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, 
 
 void Menu::LoadMenuGUI(tgui::Gui &gui)
 {
+	//auto picture1 = tgui::Picture::create({ "image.png", {10, 10, 80, 80} });
+	sf::Texture texture1, texture2;
+	if (!texture1.loadFromFile("../Sprites/Female Student 1/femalestudent1.png"))
+		std::cout << "chuj";
+	if (!texture2.loadFromFile("../Sprites/Female Student 2/femalestudent2.png"))
+		std::cout << "dupa";
+	auto picture = tgui::Picture::create(texture1);
+	picture->setSize({ "50%","100%" });
+	picture->setPosition({ "50%","0%" });
+	gui.add(picture);
+	picture->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(4000));
+
+	picture = tgui::Picture::create(texture2);
+	picture->setSize({ "50%","100%" });
+	picture->setPosition({ "0%","0%" });
+	gui.add(picture);
+	picture->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(4000));
+
 	auto titleLabel = tgui::Label::create();
 	titleLabel->setSize({ "66.67%", "12.5%" });
 	titleLabel->setPosition({ "32%", "16.67%" });
@@ -29,8 +47,8 @@ void Menu::LoadMenuGUI(tgui::Gui &gui)
 	// Create the login button
 
 	auto editBoxUsername = tgui::EditBox::create();
-	editBoxUsername->setSize({ "66.67%", "12.5%" });
-	editBoxUsername->setPosition({ "16.67%", "50%" });
+	editBoxUsername->setSize({ "25%", "12.5%" });
+	editBoxUsername->setPosition({ "37,5%", "50%" });
 	editBoxUsername->setDefaultText("Username");
 	gui.add(editBoxUsername);
 	editBoxUsername->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));

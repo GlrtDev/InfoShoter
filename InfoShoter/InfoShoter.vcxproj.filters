@@ -68,5 +68,8 @@
     <ClInclude Include="GameScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SFMLOrthogonalLayer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
