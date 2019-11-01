@@ -1,10 +1,13 @@
 #include "GameScreen.h"
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window.hpp>
 #include "SFMLOrthogonalLayer.hpp"
 
 #include <tmxlite/Map.hpp>
+
+#include "Player.h"
 
 GameScreen::GameScreen(void)
 {
@@ -28,9 +31,18 @@ int GameScreen::Run(sf::RenderWindow & window)
 	MapLayer layerZero(map, 0);
 	MapLayer layerOne(map, 1);
 	sf::Clock globalClock;
+	sf::Clock frameClock;
+	sf::Time frameTime;
 
+	Player player;
+	Player::PlayerDirections playerDirection = Player::PlayerDirections::IDLE;
+	bool moveKeyPressed = false;
 	while (Running)
 	{
+		view.setCenter(player.Renderer.GetPosition());
+
+		view.move(sf::Vector2f(210,330));
+		frameTime = frameClock.restart();
 		//Verifying events
 		while (window.pollEvent(Event))
 		{
@@ -40,33 +52,34 @@ int GameScreen::Run(sf::RenderWindow & window)
 				return (-1);
 			}
 
-			if (Event.type == sf::Event::KeyPressed)
+			if (Event.type == sf::Event::KeyReleased)
 			{
-				if (Event.key.code == sf::Keyboard::W)
+				if (Event.key.code == sf::Keyboard::W || Event.key.code == sf::Keyboard::S) 
 				{
-					view.move(0.f, -10.f);
+					player.ResetVelocityY();
 				}
-				if (Event.key.code == sf::Keyboard::S)
+				if (Event.key.code == sf::Keyboard::A || Event.key.code == sf::Keyboard::D) 
 				{
-					view.move(0.f, 10.f);
-				}
-				if (Event.key.code == sf::Keyboard::A)
-				{
-					view.move(-10.f, 0.f);
-				}
-				if (Event.key.code == sf::Keyboard::D)
-				{
-					view.move(10.f, 0.f);
+					player.ResetVelocityX();
 				}
 			}
 			gui.handleEvent(Event);
 		}
+		player.Control();
+
+		player.Move(frameTime);
+
 		sf::Time duration = globalClock.getElapsedTime();
 		layerZero.update(duration);
+
+		
 
 		window.clear(sf::Color::Black);
 		window.setView(view);
 		window.draw(layerZero);
+		
+		
+		player.Renderer.Draw(window, frameTime);
 		window.draw(layerOne);
 		gui.draw();
 		window.display();

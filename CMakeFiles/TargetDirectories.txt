@@ -1,4 +1,0 @@
-C:/Users/Acer/Desktop/szkoła/infa/projekt/InfoShoter/CMakeFiles/tmxlite.dir
-C:/Users/Acer/Desktop/szkoła/infa/projekt/InfoShoter/CMakeFiles/INSTALL.dir
-C:/Users/Acer/Desktop/szkoła/infa/projekt/InfoShoter/CMakeFiles/ALL_BUILD.dir
-C:/Users/Acer/Desktop/szkoła/infa/projekt/InfoShoter/CMakeFiles/ZERO_CHECK.dir

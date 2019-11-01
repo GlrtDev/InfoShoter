@@ -18,7 +18,6 @@ void Menu::NextHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, 
 
 void Menu::LoadMenuGUI(tgui::Gui &gui)
 {
-	//auto picture1 = tgui::Picture::create({ "image.png", {10, 10, 80, 80} });
 	sf::Texture texture1, texture2;
 	if (!texture1.loadFromFile("../Sprites/Female Student 1/femalestudent1.png"))
 		std::cout << "chuj";
@@ -26,7 +25,7 @@ void Menu::LoadMenuGUI(tgui::Gui &gui)
 		std::cout << "dupa";
 	auto picture = tgui::Picture::create(texture1);
 	picture->setSize({ "50%","100%" });
-	picture->setPosition({ "50%","0%" });
+	picture->setPosition({ "50%","3%" });
 	gui.add(picture);
 	picture->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(4000));
 
@@ -48,7 +47,7 @@ void Menu::LoadMenuGUI(tgui::Gui &gui)
 
 	auto editBoxUsername = tgui::EditBox::create();
 	editBoxUsername->setSize({ "25%", "12.5%" });
-	editBoxUsername->setPosition({ "37,5%", "50%" });
+	editBoxUsername->setPosition({ "37.5%", "50%" });
 	editBoxUsername->setDefaultText("Username");
 	gui.add(editBoxUsername);
 	editBoxUsername->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));
@@ -68,14 +67,14 @@ void Menu::LoadMenuGUI(tgui::Gui &gui)
 
 	// Call the login function when the button is pressed and pass the edit boxes that we created as parameters
 	auto nextButton = tgui::Button::create("Next");
-	nextButton->setSize({ "50%", "16.67%" });
-	nextButton->setPosition({ "25%", "70%" });
+	nextButton->setSize({ "20%", "10.67%" });
+	nextButton->setPosition({ "40%", "70%" });
 	gui.add(nextButton,"NextnextButton");
 	nextButton->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));
 
 
 	auto startButton = tgui::Button::create("Start");
-	startButton->setSize({ "20%", "16.67%" });
+	startButton->setSize({ "20%", "10.67%" });
 	startButton->setPosition({ "40%", "70%" });
 	gui.add(startButton, "StartstartButton");
 	startButton->setVisible(false);

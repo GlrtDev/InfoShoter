@@ -125,6 +125,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimatedSprite.cpp" />
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="cScreen.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="Gun.cpp" />
@@ -132,12 +134,15 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuScreen.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerRenderer.cpp" />
     <ClCompile Include="sprawozdanie.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimatedSprite.hpp" />
+    <ClInclude Include="Animation.hpp" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="cScreen.h" />
     <ClInclude Include="GameScreen.h" />
@@ -146,6 +151,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuScreen.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerRenderer.h" />
     <ClInclude Include="Screens.h" />
     <ClInclude Include="SFMLOrthogonalLayer.hpp" />
   </ItemGroup>
