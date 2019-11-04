@@ -1,12 +1,13 @@
 #include "player.h"
-#include <cmath>
+//#include <cmath>
 
-#define M_PI 3.14159265358979323846
+//#define M_PI 3.14159265358979323846
 
-Player::Player()
+Player::Player(sf::Vector2f startPosition) : boundingBox({ { sf::Vector2f(-84.f, -84.f), sf::Vector2f(0.f, -84.f), sf::Vector2f(0.f, 0.f), sf::Vector2f(-84.f, 0.f) } }), Renderer(startPosition)
 {
 	maxSpeed = sf::Vector2f(150.f, 150.f);
 	maxSpeedInv = sf::Vector2f(-150.f, -150.f);
+
 }
 
 void Player::Move(sf::Time &frameTime)

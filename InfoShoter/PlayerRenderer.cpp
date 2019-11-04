@@ -2,7 +2,7 @@
 
 
 
-PlayerRenderer::PlayerRenderer() : animatedSprite(sf::seconds(0.1f), false, true)
+PlayerRenderer::PlayerRenderer(sf::Vector2f startPosition) : animatedSprite(sf::seconds(0.1f), false, true)
 {
 	if (!texture.loadFromFile("../Sprites/4 directional character/knight iso char.png"))
 	{
@@ -42,7 +42,7 @@ PlayerRenderer::PlayerRenderer() : animatedSprite(sf::seconds(0.1f), false, true
 	
 	// set up AnimatedSprite
 	//AnimatedSprite animatedSprite(sf::seconds(0.2), true, false);
-	//animatedSprite.setPosition(sf::Vector2f(10,10));
+	animatedSprite.setPosition(startPosition);
 	currentAnimation = &idleAnimation;
 	animatedSprite.play(*currentAnimation);
 	

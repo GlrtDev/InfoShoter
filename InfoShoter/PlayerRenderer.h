@@ -24,7 +24,7 @@ private:
 
 public:
 
-	PlayerRenderer();
+	PlayerRenderer(sf::Vector2f startPosition);
 	~PlayerRenderer();
 	void ChangeAnimation(int i);
 	void PlayAnimation();
