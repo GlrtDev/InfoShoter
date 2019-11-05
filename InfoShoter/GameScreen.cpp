@@ -18,8 +18,6 @@ GameScreen::GameScreen(void)
 
 int GameScreen::Run(sf::RenderWindow & window)
 {
-	//sf::Vector2f correctionVector(-120, -150);
-	//sf::Vector2f correctionVector(-300, -200);
 	sf::View view;
 	view.setViewport(sf::FloatRect(0.f, 0.f, 1.5f, 2.f));
 	window.setView(view);
@@ -27,11 +25,11 @@ int GameScreen::Run(sf::RenderWindow & window)
 	sf::Event Event;
 	tgui::Gui gui{ window };
 
-	sf::CircleShape shape[5];
+	/*sf::CircleShape shape[5];
 	for (int i = 1; i < 5; i++) {
 		shape[i].setFillColor(sf::Color(100, 250, 50));
 		shape[i].setRadius(2);
-	}
+	}*/
 	tmx::Map map;
 	map.load("../assets/Level1TileMap.tmx");
 	
@@ -62,12 +60,11 @@ int GameScreen::Run(sf::RenderWindow & window)
 	sf::Vector2f startPosition(350.f, 300.f);
 	Player player(startPosition);
 	Player::PlayerDirections playerDirection = Player::PlayerDirections::IDLE;
-	bool moveKeyPressed = false;
+
 	while (Running)
 	{
-		view.setCenter(player.Renderer.GetPosition());
+		view.setCenter(player.Renderer.GetPosition()+ sf::Vector2f(210, 330));
 
-		view.move(sf::Vector2f(210,330));
 		frameTime = frameClock.restart();
 		//Verifying events
 		while (window.pollEvent(Event))
@@ -98,28 +95,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 		sf::Time duration = globalClock.getElapsedTime();
 		layerZero.update(duration);
 		//COLISION DETECTION START
-		
-					for(auto& object: collisionLayer.getObjects())
-					{
-						int i = 1;
-						for (auto& point : player.boundingBox)
-						{
-						
-							if (EventHandler::contains(player.Renderer.GetPosition() - point, object.getPoints(), object.getPosition() ) )
-							{	
-								player.ResetVelocityX();
-								player.ResetVelocityY();
-									break;
-							}
-							else
-							{
-									std::cout << "o";
-
-							}
-							shape[i].setPosition( player.Renderer.GetPosition() - point);
-							i++;
-						}
-					}
+		EventHandler::CollisionDetection(player, collisionLayer, frameTime);
 		//COLLISION DETECT END
 		window.clear(sf::Color::Black);
 		window.setView(view);
@@ -129,10 +105,10 @@ int GameScreen::Run(sf::RenderWindow & window)
 		player.Renderer.Draw(window, frameTime);
 		window.draw(layerOne);
 		gui.draw();
-		window.draw(shape[1]);
+		/*window.draw(shape[1]);
 		window.draw(shape[2]);
 		window.draw(shape[3]);
-		window.draw(shape[4]);
+		window.draw(shape[4]);*/
 		window.display();
 	}
 	return (-1);

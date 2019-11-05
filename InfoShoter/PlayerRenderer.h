@@ -31,6 +31,7 @@ public:
 	// load texture (spritesheet)
 	void Draw(sf::RenderWindow &window, sf::Time &frameTime);
 	sf::Vector2f GetPosition();
+	void SetPosition(sf::Vector2f position_);
 	void Move(sf::Vector2f movement, sf::Time &frameTime);
 	
 };

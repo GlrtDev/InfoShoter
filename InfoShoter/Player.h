@@ -26,6 +26,6 @@ public:
 	void SetAcceleration(PlayerDirections direction);
 	void ResetVelocityX();
 	void ResetVelocityY();
-
+	void WallCollision(sf::Time &frameTime);
 	void Control();
 };

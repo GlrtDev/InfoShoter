@@ -48,6 +48,9 @@
     <ClCompile Include="PlayerRenderer.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="EventHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">

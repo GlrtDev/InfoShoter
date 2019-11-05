@@ -93,6 +93,11 @@ sf::Vector2f PlayerRenderer::GetPosition()
 	return animatedSprite.getPosition();
 }
 
+void PlayerRenderer::SetPosition(sf::Vector2f position_)
+{
+	animatedSprite.setPosition(position_);
+}
+
 void PlayerRenderer::Move(sf::Vector2f movement, sf::Time &frameTime)
 {
 	animatedSprite.move(movement * frameTime.asSeconds());

@@ -3,7 +3,7 @@
 
 //#define M_PI 3.14159265358979323846
 
-Player::Player(sf::Vector2f startPosition) : boundingBox({ { sf::Vector2f(-84.f, -84.f), sf::Vector2f(0.f, -84.f), sf::Vector2f(0.f, 0.f), sf::Vector2f(-84.f, 0.f) } }), Renderer(startPosition)
+Player::Player(sf::Vector2f startPosition) : boundingBox({ { sf::Vector2f(-58.f, -84.f), sf::Vector2f(-21.f, -84.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-58.f, 0.f) } }), Renderer(startPosition)
 {
 	maxSpeed = sf::Vector2f(150.f, 150.f);
 	maxSpeedInv = sf::Vector2f(-150.f, -150.f);
@@ -94,6 +94,11 @@ void Player::ResetVelocityY()
 {
 	velocity.y = 0;
 	acceleration.y = 0;
+}
+
+void Player::WallCollision(sf::Time &frameTime)
+{
+	Renderer.Move(-velocity, frameTime);
 }
 
 void Player::Control()

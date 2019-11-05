@@ -128,6 +128,7 @@
     <ClCompile Include="AnimatedSprite.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="cScreen.cpp" />
+    <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="main.cpp" />
