@@ -59,7 +59,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 
 	sf::Vector2f startPosition(350.f, 300.f);
 	Player player(startPosition);
-	Player::PlayerDirections playerDirection = Player::PlayerDirections::IDLE;
+	Player::PlayerStates playerDirection = Player::PlayerStates::IDLE;
 
 	while (Running)
 	{

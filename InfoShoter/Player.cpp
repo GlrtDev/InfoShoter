@@ -26,11 +26,14 @@ void Player::Move(sf::Time &frameTime)
 	Renderer.Move(velocity, frameTime);
 }
 
-void Player::SetAcceleration(PlayerDirections direction)
+void Player::SetAcceleration(PlayerStates direction, bool attack, const std::string facingSide)
 {
 	switch (direction)
 	{
 	case UP:
+		if(attack)
+		Renderer.ChangeAnimation(5);
+		else
 		Renderer.ChangeAnimation(0);
 		if (velocity.y > 0)
 			acceleration.y = -1.5f;
@@ -39,7 +42,10 @@ void Player::SetAcceleration(PlayerDirections direction)
 		break;
 
 	case DOWN:
-		Renderer.ChangeAnimation(1);
+		if (attack)
+			Renderer.ChangeAnimation(6);
+		else
+			Renderer.ChangeAnimation(1);
 		if (velocity.y < 0)
 			acceleration.y = 1.5f;
 		else
@@ -48,7 +54,10 @@ void Player::SetAcceleration(PlayerDirections direction)
 		break;
 
 	case RIGHT:
-		Renderer.ChangeAnimation(2);
+		if (attack)
+			Renderer.ChangeAnimation(7);
+		else
+			Renderer.ChangeAnimation(2);
 		if (velocity.x < 0)
 			acceleration.x = 1.5f;
 		else
@@ -56,7 +65,10 @@ void Player::SetAcceleration(PlayerDirections direction)
 		break;
 
 	case LEFT:
-		Renderer.ChangeAnimation(3);
+		if (attack)
+			Renderer.ChangeAnimation(8);
+		else
+			Renderer.ChangeAnimation(3);
 		if (velocity.x > 0)
 			acceleration.x = -1.5f;
 		else
@@ -65,7 +77,19 @@ void Player::SetAcceleration(PlayerDirections direction)
 		break;
 
 	default:
-		Renderer.ChangeAnimation(4);
+		if (attack) 
+		{
+			if (facingSide == "LEFT")
+				Renderer.ChangeAnimation(8);
+			else if (facingSide == "RIGHT")
+				Renderer.ChangeAnimation(7);
+			else if (facingSide == "UP")
+				Renderer.ChangeAnimation(5);
+			else
+				Renderer.ChangeAnimation(6);
+		}
+		else
+			Renderer.ChangeAnimation(4);
 		acceleration.x = 0.f;
 		acceleration.y = 0.f;
 
@@ -103,34 +127,45 @@ void Player::WallCollision(sf::Time &frameTime)
 
 void Player::Control()
 {
-	bool moveKeyPressed = false;
+	bool attack = false;
+	bool KeyPressed = false;
+	static std::string facingSide;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+	{
+		attack = true;
+	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		SetAcceleration(Player::PlayerDirections::UP);
-		moveKeyPressed = true;
+		facingSide = "UP";
+		SetAcceleration(Player::PlayerStates::UP,attack,facingSide);
+		KeyPressed = true;
 	}
 
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		SetAcceleration(Player::PlayerDirections::DOWN);
-		moveKeyPressed = true;
+		facingSide = "DOWN";
+		SetAcceleration(Player::PlayerStates::DOWN,attack, facingSide);
+		KeyPressed = true;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		SetAcceleration(Player::PlayerDirections::LEFT);
-		moveKeyPressed = true;
+		facingSide = "LEFT";
+		SetAcceleration(Player::PlayerStates::LEFT, attack, facingSide);
+		KeyPressed = true;
 	}
 
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		SetAcceleration(Player::PlayerDirections::RIGHT);
-		moveKeyPressed = true;
+		facingSide = "RIGHT";
+		SetAcceleration(Player::PlayerStates::RIGHT, attack, facingSide);
+		KeyPressed = true;
 	}
+	
 
-	if (!moveKeyPressed)
-		SetAcceleration(Player::PlayerDirections::IDLE);
+	if (!KeyPressed)
+		SetAcceleration(Player::PlayerStates::IDLE, attack, facingSide);
 
 	Renderer.PlayAnimation();
 }

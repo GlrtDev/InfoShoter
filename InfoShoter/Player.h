@@ -4,6 +4,7 @@
 #include <SFML/System/Vector2.hpp>
 #include "PlayerRenderer.h"
 #include <array>
+#include <string>
 
 class Player
 {
@@ -19,11 +20,11 @@ private:
 public:
 	std::array<sf::Vector2f, 4> boundingBox;
 
-	enum PlayerDirections { UP, DOWN, RIGHT, LEFT, IDLE };
+	enum PlayerStates { UP, DOWN, RIGHT, LEFT, IDLE };
 	Player(sf::Vector2f startPosition);
 	PlayerRenderer Renderer;
 	void Move(sf::Time &frameTime);
-	void SetAcceleration(PlayerDirections direction);
+	void SetAcceleration(PlayerStates direction, bool attack, const std::string facingSide);
 	void ResetVelocityX();
 	void ResetVelocityY();
 	void WallCollision(sf::Time &frameTime);

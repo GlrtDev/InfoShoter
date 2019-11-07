@@ -17,6 +17,11 @@ PlayerRenderer::PlayerRenderer(sf::Vector2f startPosition) : animatedSprite(sf::
 	walkingAnimationRight.setSpriteSheet(texture);
 	walkingAnimationUp.setSpriteSheet(texture);
 
+	attackAnimationDown.setSpriteSheet(texture);
+	attackAnimationLeft.setSpriteSheet(texture);
+	attackAnimationRight.setSpriteSheet(texture);
+	attackAnimationUp.setSpriteSheet(texture);
+
 	for(int i = 0; i<4; i++)
 		idleAnimation.addFrame(sf::IntRect(84*i, 0, 84, 84));
 
@@ -37,7 +42,17 @@ PlayerRenderer::PlayerRenderer(sf::Vector2f startPosition) : animatedSprite(sf::
 	for (int i = 0; i < 2; i++)
 		walkingAnimationLeft.addFrame(sf::IntRect(84 * i, 252, 84, 84));
 
-	
+	for (int i = 2; i < 5; i++)
+		attackAnimationDown.addFrame(sf::IntRect(84 * i, 252, 84, 84));
+
+	for (int i = 5; i < 8; i++)
+		attackAnimationUp.addFrame(sf::IntRect(84 * i, 252, 84, 84));
+
+	for (int i = 0; i < 3; i++)
+		attackAnimationRight.addFrame(sf::IntRect(84 * i, 336, 84, 84));
+
+	for (int i = 3; i < 6; i++)
+		attackAnimationLeft.addFrame(sf::IntRect(84 * i, 336, 84, 84));
 
 	
 	// set up AnimatedSprite
@@ -72,9 +87,20 @@ void PlayerRenderer::ChangeAnimation(int animationIndex)
 	case 4:
 		currentAnimation = &idleAnimation;
 		break;
+	case 5:
+		currentAnimation = &attackAnimationUp;
+		break;
+	case 6:
+		currentAnimation = &attackAnimationDown;
+		break;
+	case 7:
+		currentAnimation = &attackAnimationRight;
+		break;
+	case 8:
+		currentAnimation = &attackAnimationLeft;
+		break;
+		
 	}
-	
-
 }
 
 void PlayerRenderer::PlayAnimation()
