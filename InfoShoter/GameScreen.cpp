@@ -40,11 +40,9 @@ int GameScreen::Run(sf::RenderWindow & window)
 	//TO DO (make this prettier)
 	sf::CircleShape PlayerDotMiniMap;
 	PlayerDotMiniMap.setFillColor(sf::Color(250, 250, 50));
-	PlayerDotMiniMap.setRadius(10);
+	PlayerDotMiniMap.setRadius(10.f);
 
-	sf::CircleShape EnemyDotMiniMap;
-	EnemyDotMiniMap.setFillColor(sf::Color(255, 0, 0));
-	EnemyDotMiniMap.setRadius(10);
+	
 
 	
 	tmx::Map map;
@@ -72,23 +70,27 @@ int GameScreen::Run(sf::RenderWindow & window)
 	}
 
 	sf::Clock spawnPeriod;
+	sf::Clock timeBetwenWaves;
 	sf::Clock globalClock;
 	sf::Clock frameClock;
 	sf::Time frameTime;
 
 	sf::Vector2f startPosition(350.f, 300.f);
 	Player player(startPosition);
-	std::vector<Enemy*> enemiesLiving;
-	std::vector<Enemy*> enemySpawnQueue;
-	Bat B1(path[0]);
-	Bat B2(path[0]);
-	Bat B3(path[0]);
-	Bat B4(path[0]);
 
-	enemySpawnQueue.push_back(&B1); //XDDDDDDDDDDDDDDDDDDDDDDDDD
-	enemySpawnQueue.push_back(&B2);
-	enemySpawnQueue.push_back(&B3);
-	enemySpawnQueue.push_back(&B4);
+	std::vector<Enemy> enemiesLiving;
+	std::vector<Enemy> enemySpawnQueue;
+	bool waveStarted=false;
+	int waveNumber = 0;
+
+	Bat Bat(path[0]);
+	
+
+	enemySpawnQueue.push_back(Bat); 
+	enemySpawnQueue.push_back(Bat);
+	enemySpawnQueue.push_back(Bat);
+	enemySpawnQueue.push_back(Bat);
+	enemySpawnQueue.push_back(Bat);
 
 	while (Running)
 	{
@@ -121,27 +123,35 @@ int GameScreen::Run(sf::RenderWindow & window)
 		
 		PlayerDotMiniMap.setPosition(player.Renderer.GetPosition());
 
-		//TO DO ( make dot on minimap for every enemy )
-		if(!enemiesLiving.empty())
-		EnemyDotMiniMap.setPosition(enemiesLiving.back()->GetPosition());
-
 		//std::cout << std::endl << player.Renderer.GetPosition().x<<" " << player.Renderer.GetPosition().y;
 		player.Control();
 		player.Move(frameTime);
 
-		if (spawnPeriod.getElapsedTime().asSeconds() > 2 && !enemySpawnQueue.empty()) {
-			enemiesLiving.push_back( enemySpawnQueue.back() );
-			enemySpawnQueue.pop_back();
-			spawnPeriod.restart();
+		if (timeBetwenWaves.getElapsedTime().asSeconds() > 1 && !waveStarted) {
+			waveStarted = true;
+			timeBetwenWaves.restart();
 		}
-		for (auto& liveEnemy : enemiesLiving) {
-			liveEnemy->FollowPath(frameTime);
-		}
+
+			if (spawnPeriod.getElapsedTime().asSeconds() > 2 && !enemySpawnQueue.empty() && waveStarted) {
+				enemiesLiving.push_back(enemySpawnQueue.back());
+				enemySpawnQueue.pop_back();
+				spawnPeriod.restart();
+			}
+		
+			if (enemiesLiving.size() == 0 && waveStarted)
+				waveStarted = false;
+
+			for (auto& liveEnemy : enemiesLiving) {
+				liveEnemy.FollowPath(frameTime);
+			}
+			//std::cout << waveStarted;
+
+
 
 		sf::Time duration = globalClock.getElapsedTime();
 		decorativeLayer.update(duration);
 		//COLISION DETECTION START
-		EventHandler::CollisionDetection(player, collisionLayer, frameTime);
+		EventHandler::CollisionDetection(player, collisionLayer, frameTime, enemiesLiving); //walls collisions
 		//COLLISION DETECT END
 		window.clear(sf::Color::Black);
 
@@ -151,15 +161,20 @@ int GameScreen::Run(sf::RenderWindow & window)
 		window.draw(upperGroundLayer);
 
 		for (auto& en : enemiesLiving)
-			en->Draw(window, frameTime);
+			en.Draw(window, frameTime);
 
 		window.draw(decorativeLayer);
-		gui.draw();
+		
 
 		window.setView(miniMap);
+
+		
+
 		window.draw(groundLayer);
+		for (auto& en : enemiesLiving)
+			en.DrawOnMinimap(window);
 		window.draw(PlayerDotMiniMap);
-		window.draw(EnemyDotMiniMap);
+		gui.draw();
 		//player.Renderer.Draw(window, frameTime);
 		//window.draw(upperGroundLayer);
 		window.display();

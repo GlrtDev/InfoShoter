@@ -21,5 +21,9 @@ Bat::Bat(std::queue<sf::Vector2f> path_) : Enemy(path_) {
 	currentAnimation = &walkingAnimationLeft;
 	animatedSprite.play(*currentAnimation);
 	animatedSprite.setScale(sf::Vector2f(0.3f, 0.3f));
-
+	healthBarOffset = sf::Vector2i(37, 72);
+	boundingBox = {sf::Vector2f(15.f,15.f),sf::Vector2f(70.f,70.f),sf::Vector2f(15.f,70.f), sf::Vector2f(70.f,15.f) };
+	minimapOffset = sf::Vector2f(35.f, 35.f);
+	healthPoints = 100;
+	maxHealthPoints = 100;
 }

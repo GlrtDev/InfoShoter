@@ -3,10 +3,12 @@
 #include "tmxlite/Map.hpp"
 #include <vector>
 #include <queue>
+#include "Enemy.h"
 #include "Player.h"
 class EventHandler {
 public:
-	static bool contains(sf::Vector2f point, std::vector<tmx::Vector2f> object, tmx::Vector2f position)
+	template<typename T>
+	static bool contains(sf::Vector2f point, std::vector<T> object, T position)
 	{
 		//if (m_shape == Polyline) return false;
 
@@ -32,6 +34,7 @@ public:
 		//std::cout << std::endl;
 		return result;
 	}
-	static void CollisionDetection(Player& player, tmx::ObjectGroup collisionLayer,sf::Time frameTime);
+	static void CollisionDetection(Player& player, tmx::ObjectGroup collisionLayer,sf::Time frameTime, std::vector<Enemy> &enemiesLiving);
 	static std::queue<sf::Vector2f> initializePaths(std::queue<sf::Vector2f> *paths);
+	
 };

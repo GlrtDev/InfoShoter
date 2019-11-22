@@ -14,9 +14,9 @@ private:
 	sf::Vector2f maxSpeed, maxSpeedInv;
 	int gold;
 	int score;
-	
+	int swordDamage;
 	std::list<Gun> Guns;
-	//sf::Vector2f startPosition;
+
 public:
 	std::array<sf::Vector2f, 6> boundingBox;
 
@@ -29,4 +29,5 @@ public:
 	void ResetVelocityY();
 	void WallCollision(sf::Time &frameTime);
 	void Control();
+	int GetDamage();
 };

@@ -7,7 +7,7 @@ Player::Player(sf::Vector2f startPosition) : boundingBox({ { sf::Vector2f(-35.f,
 {
 	maxSpeed = sf::Vector2f(150.f, 150.f);
 	maxSpeedInv = sf::Vector2f(-150.f, -150.f);
-	
+	swordDamage = 5;
 
 }
 
@@ -29,51 +29,60 @@ void Player::Move(sf::Time &frameTime)
 
 void Player::SetAcceleration(PlayerStates direction, bool attack, const std::string facingSide)
 {
+	float speed = 1.5f;
 	switch (direction)
 	{
 	case UP:
-		if(attack)
-		Renderer.ChangeAnimation(5);
+		if (attack) {
+			Renderer.ChangeAnimation(5);
+			speed = 1.f;
+		}
 		else
-		Renderer.ChangeAnimation(0);
+			Renderer.ChangeAnimation(0);
 		if (velocity.y > 0)
 			acceleration.y = -2.5f;
 		else
-		acceleration.y = -1.5f;
+			acceleration.y = -speed;
 		break;
 
 	case DOWN:
-		if (attack)
-			Renderer.ChangeAnimation(6);
+		if (attack) {
+		Renderer.ChangeAnimation(6);
+		speed = 1.f;
+		}
 		else
 			Renderer.ChangeAnimation(1);
 		if (velocity.y < 0)
 			acceleration.y = 2.5f;
 		else
-		acceleration.y = 1.5f;
+		acceleration.y = speed;
 
 		break;
 
 	case RIGHT:
-		if (attack)
+		if (attack) {
 			Renderer.ChangeAnimation(7);
+			speed = 1.f;
+		}
 		else
 			Renderer.ChangeAnimation(2);
 		if (velocity.x < 0)
 			acceleration.x = 2.5f;
 		else
-		acceleration.x = 1.5f;
+		acceleration.x = speed;
 		break;
 
 	case LEFT:
-		if (attack)
+		if (attack) {
 			Renderer.ChangeAnimation(8);
+			speed = 1.f;
+		}
 		else
 			Renderer.ChangeAnimation(3);
 		if (velocity.x > 0)
 			acceleration.x = -2.5f;
 		else
-		acceleration.x = -1.5f;
+		acceleration.x = -speed;
 
 		break;
 
@@ -128,12 +137,14 @@ void Player::WallCollision(sf::Time &frameTime)
 
 void Player::Control()
 {
+	swordDamage = 0;
 	bool attack = false;
 	bool KeyPressed = false;
 	static std::string facingSide;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 	{
 		attack = true;
+		swordDamage = 5;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -169,5 +180,10 @@ void Player::Control()
 		SetAcceleration(Player::PlayerStates::IDLE, attack, facingSide);
 
 	Renderer.PlayAnimation();
+}
+
+int Player::GetDamage()
+{
+	return swordDamage;
 }
 

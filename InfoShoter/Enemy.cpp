@@ -37,9 +37,13 @@ bool Enemy::Move(sf::Vector2f targetPosition, sf::Time &frameTime) {
 		}
 	}
 	//std::cout << std::endl << "y " << delta.y << " y mov  " << movey << " x " << delta.x << " y mov  " << movex;
-	std::cout << std::endl << "x " << animatedSprite.getPosition().x << " y  " << animatedSprite.getPosition().y << " tar" << targetPosition.x << " " << targetPosition.y;
+	//std::cout << std::endl << "x " << animatedSprite.getPosition().x << " y  " << animatedSprite.getPosition().y << " tar" << targetPosition.x << " " << targetPosition.y;
 	movement = sf::Vector2f(movex, movey);
 	animatedSprite.move(movement * frameTime.asSeconds());
+	healthBar.setPosition(animatedSprite.getPosition().x + healthBarOffset.x, animatedSprite.getPosition().y + healthBarOffset.y);
+	healthBarBackground.setPosition(animatedSprite.getPosition().x + healthBarOffset.x, animatedSprite.getPosition().y + healthBarOffset.y);
+	for (int i = 0; i < 4; i++) 
+		boundingBoxDots[i].setPosition(animatedSprite.getPosition() + boundingBox[i]);
 	return targetReached;
 }
 
@@ -48,10 +52,33 @@ void Enemy::FollowPath(sf::Time &frameTime)
 	if (!path.empty()) {
 		if (Move(path.front(), frameTime)) {
 			path.pop();
-			std::cout << "POOOOOOOOP";
+			//std::cout << "POOOOOOOOP";
 		}
-		else{
-			//std::cout << "nie" << std::endl;
-		}
+		
 	}
+	else {
+		std::cout << "nie" << std::endl;
+	}
+}
+
+sf::Vector2f Enemy::getPosition()
+{
+	return animatedSprite.getPosition();
+}
+
+bool Enemy::ReceiveDamage(int damage)
+{
+	healthPoints -= damage;
+	healthBar.setSize(sf::Vector2f(25.f*((float)healthPoints /(float) maxHealthPoints), 4.f));
+	std::cout << healthPoints << std::endl;
+	if (healthPoints <= 0) {
+		KillThis();
+		return true;
+	}
+	return false;
+}
+
+void Enemy::KillThis()
+{
+	//delete this;
 }
