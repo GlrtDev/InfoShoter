@@ -127,7 +127,10 @@
   <ItemGroup>
     <ClCompile Include="AnimatedSprite.cpp" />
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Bat.cpp" />
     <ClCompile Include="cScreen.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyRenderer.cpp" />
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="Gun.cpp" />
@@ -142,10 +145,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bat.h" />
     <ClInclude Include="AnimatedSprite.hpp" />
     <ClInclude Include="Animation.hpp" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="cScreen.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyRenderer.h" />
     <ClInclude Include="EventHandler.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="Gun.h" />

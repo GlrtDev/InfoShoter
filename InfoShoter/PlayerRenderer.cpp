@@ -60,7 +60,7 @@ PlayerRenderer::PlayerRenderer(sf::Vector2f startPosition) : animatedSprite(sf::
 	animatedSprite.setPosition(startPosition);
 	currentAnimation = &idleAnimation;
 	animatedSprite.play(*currentAnimation);
-	
+	animatedSprite.setScale(sf::Vector2f(0.7f, 0.7f));
 }
 
 

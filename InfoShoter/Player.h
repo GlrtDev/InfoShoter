@@ -18,7 +18,7 @@ private:
 	std::list<Gun> Guns;
 	//sf::Vector2f startPosition;
 public:
-	std::array<sf::Vector2f, 4> boundingBox;
+	std::array<sf::Vector2f, 6> boundingBox;
 
 	enum PlayerStates { UP, DOWN, RIGHT, LEFT, IDLE };
 	Player(sf::Vector2f startPosition);

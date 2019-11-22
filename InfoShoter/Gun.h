@@ -2,7 +2,6 @@
 #include <string>
 #include <map>
 
- //tworze jako szablon ¿eby child klasy mia³y w³asne instancje statycznych pól
 class Gun 
 {
 protected:
@@ -18,6 +17,7 @@ protected:
 	std::string name;
 	
 public:
+	Gun();
 	virtual void shoot();
 	virtual void reload();
 };

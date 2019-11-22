@@ -1,3 +1,5 @@
+#include <deque>
+
 #include "GameScreen.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -8,7 +10,9 @@
 #include <tmxlite/Map.hpp>
 
 #include "Player.h"
+#include "Bat.h"
 #include "EventHandler.h"
+#include <vector>
 GameScreen::GameScreen(void)
 {
 	alpha_max = 3 * 255;
@@ -18,23 +22,37 @@ GameScreen::GameScreen(void)
 
 int GameScreen::Run(sf::RenderWindow & window)
 {
+	std::queue<sf::Vector2f> path[3];
+	*path = EventHandler::initializePaths(path);
+	
 	sf::View view;
-	view.setViewport(sf::FloatRect(0.f, 0.f, 1.5f, 2.f));
-	window.setView(view);
+	view.setViewport(sf::FloatRect(0.f, 0.f, 2.25f, 4.f)); // 9:16
+	
+
+	sf::View miniMap;
+	miniMap.setViewport(sf::FloatRect(0.f, 0.75f, 0.25f, 0.25f)); // 9:16
+	
+	sf::Vector2f cameraCorrection(310.f, 400.f);
 	bool Running = true;
 	sf::Event Event;
 	tgui::Gui gui{ window };
 
-	/*sf::CircleShape shape[5];
-	for (int i = 1; i < 5; i++) {
-		shape[i].setFillColor(sf::Color(100, 250, 50));
-		shape[i].setRadius(2);
-	}*/
+	//TO DO (make this prettier)
+	sf::CircleShape PlayerDotMiniMap;
+	PlayerDotMiniMap.setFillColor(sf::Color(250, 250, 50));
+	PlayerDotMiniMap.setRadius(10);
+
+	sf::CircleShape EnemyDotMiniMap;
+	EnemyDotMiniMap.setFillColor(sf::Color(255, 0, 0));
+	EnemyDotMiniMap.setRadius(10);
+
+	
 	tmx::Map map;
 	map.load("../assets/Level1TileMap.tmx");
 	
-	MapLayer layerZero(map, 0);
-	MapLayer layerOne(map, 1);
+	MapLayer groundLayer(map, 0);
+	MapLayer upperGroundLayer(map, 1);
+	MapLayer decorativeLayer(map, 2);
 	tmx::ObjectGroup collisionLayer;
 	/*tmx::ObjectGroup collisionLayer;*/
 	int i = 1;
@@ -53,18 +71,29 @@ int GameScreen::Run(sf::RenderWindow & window)
 		}
 	}
 
+	sf::Clock spawnPeriod;
 	sf::Clock globalClock;
 	sf::Clock frameClock;
 	sf::Time frameTime;
 
 	sf::Vector2f startPosition(350.f, 300.f);
 	Player player(startPosition);
-	Player::PlayerStates playerDirection = Player::PlayerStates::IDLE;
+	std::vector<Enemy*> enemiesLiving;
+	std::vector<Enemy*> enemySpawnQueue;
+	Bat B1(path[0]);
+	Bat B2(path[0]);
+	Bat B3(path[0]);
+	Bat B4(path[0]);
+
+	enemySpawnQueue.push_back(&B1); //XDDDDDDDDDDDDDDDDDDDDDDDDD
+	enemySpawnQueue.push_back(&B2);
+	enemySpawnQueue.push_back(&B3);
+	enemySpawnQueue.push_back(&B4);
 
 	while (Running)
 	{
-		view.setCenter(player.Renderer.GetPosition()+ sf::Vector2f(210, 330));
-
+		view.setCenter(player.Renderer.GetPosition()+ cameraCorrection);
+		miniMap.setCenter(player.Renderer.GetPosition());
 		frameTime = frameClock.restart();
 		//Verifying events
 		while (window.pollEvent(Event))
@@ -88,27 +117,51 @@ int GameScreen::Run(sf::RenderWindow & window)
 			}
 			gui.handleEvent(Event);
 		}
-		player.Control();
 
+		
+		PlayerDotMiniMap.setPosition(player.Renderer.GetPosition());
+
+		//TO DO ( make dot on minimap for every enemy )
+		if(!enemiesLiving.empty())
+		EnemyDotMiniMap.setPosition(enemiesLiving.back()->GetPosition());
+
+		//std::cout << std::endl << player.Renderer.GetPosition().x<<" " << player.Renderer.GetPosition().y;
+		player.Control();
 		player.Move(frameTime);
 
+		if (spawnPeriod.getElapsedTime().asSeconds() > 2 && !enemySpawnQueue.empty()) {
+			enemiesLiving.push_back( enemySpawnQueue.back() );
+			enemySpawnQueue.pop_back();
+			spawnPeriod.restart();
+		}
+		for (auto& liveEnemy : enemiesLiving) {
+			liveEnemy->FollowPath(frameTime);
+		}
+
 		sf::Time duration = globalClock.getElapsedTime();
-		layerZero.update(duration);
+		decorativeLayer.update(duration);
 		//COLISION DETECTION START
 		EventHandler::CollisionDetection(player, collisionLayer, frameTime);
 		//COLLISION DETECT END
 		window.clear(sf::Color::Black);
+
 		window.setView(view);
-		window.draw(layerZero);
-		
-		
+		window.draw(groundLayer);
 		player.Renderer.Draw(window, frameTime);
-		window.draw(layerOne);
+		window.draw(upperGroundLayer);
+
+		for (auto& en : enemiesLiving)
+			en->Draw(window, frameTime);
+
+		window.draw(decorativeLayer);
 		gui.draw();
-		/*window.draw(shape[1]);
-		window.draw(shape[2]);
-		window.draw(shape[3]);
-		window.draw(shape[4]);*/
+
+		window.setView(miniMap);
+		window.draw(groundLayer);
+		window.draw(PlayerDotMiniMap);
+		window.draw(EnemyDotMiniMap);
+		//player.Renderer.Draw(window, frameTime);
+		//window.draw(upperGroundLayer);
 		window.display();
 	}
 	return (-1);

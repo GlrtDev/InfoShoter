@@ -3,24 +3,25 @@
 
 //#define M_PI 3.14159265358979323846
 
-Player::Player(sf::Vector2f startPosition) : boundingBox({ { sf::Vector2f(-58.f, -84.f), sf::Vector2f(-21.f, -84.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-58.f, 0.f) } }), Renderer(startPosition)
+Player::Player(sf::Vector2f startPosition) : boundingBox({ { sf::Vector2f(-35.f, -25.f), sf::Vector2f(-21.f, -25.f), sf::Vector2f(-35.f, -50.f), sf::Vector2f(-21.f, -50.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-35.f, 0.f) } }), Renderer(startPosition)
 {
 	maxSpeed = sf::Vector2f(150.f, 150.f);
 	maxSpeedInv = sf::Vector2f(-150.f, -150.f);
+	
 
 }
 
 void Player::Move(sf::Time &frameTime)
 {
 	if (velocity.x > maxSpeed.x)
-		velocity.x -= .5f;
+		velocity.x -= 1.5f;
 	if (velocity.x < maxSpeedInv.x)
-		velocity.x += .5f;
+		velocity.x += 1.5f;
 
 	if (velocity.y > maxSpeed.y)
-		velocity.y -= .5f;
+		velocity.y -= 1.5f;
 	if (velocity.y < maxSpeedInv.y)
-		velocity.y += .5f;
+		velocity.y += 1.5f;
 
 	velocity += acceleration;
 	Renderer.Move(velocity, frameTime);
@@ -36,9 +37,9 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 		else
 		Renderer.ChangeAnimation(0);
 		if (velocity.y > 0)
-			acceleration.y = -1.5f;
+			acceleration.y = -2.5f;
 		else
-		acceleration.y = -.5f;
+		acceleration.y = -1.5f;
 		break;
 
 	case DOWN:
@@ -47,9 +48,9 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 		else
 			Renderer.ChangeAnimation(1);
 		if (velocity.y < 0)
-			acceleration.y = 1.5f;
+			acceleration.y = 2.5f;
 		else
-		acceleration.y = .5f;
+		acceleration.y = 1.5f;
 
 		break;
 
@@ -59,9 +60,9 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 		else
 			Renderer.ChangeAnimation(2);
 		if (velocity.x < 0)
-			acceleration.x = 1.5f;
+			acceleration.x = 2.5f;
 		else
-		acceleration.x = .5f;
+		acceleration.x = 1.5f;
 		break;
 
 	case LEFT:
@@ -70,9 +71,9 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 		else
 			Renderer.ChangeAnimation(3);
 		if (velocity.x > 0)
-			acceleration.x = -1.5f;
+			acceleration.x = -2.5f;
 		else
-		acceleration.x = -.5f;
+		acceleration.x = -1.5f;
 
 		break;
 

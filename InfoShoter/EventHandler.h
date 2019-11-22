@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "tmxlite/Map.hpp"
 #include <vector>
+#include <queue>
 #include "Player.h"
 class EventHandler {
 public:
@@ -32,4 +33,5 @@ public:
 		return result;
 	}
 	static void CollisionDetection(Player& player, tmx::ObjectGroup collisionLayer,sf::Time frameTime);
+	static std::queue<sf::Vector2f> initializePaths(std::queue<sf::Vector2f> *paths);
 };
