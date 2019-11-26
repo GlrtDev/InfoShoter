@@ -3,7 +3,7 @@
 
 //#define M_PI 3.14159265358979323846
 
-Player::Player(sf::Vector2f startPosition) : boundingBox({ { sf::Vector2f(-35.f, -25.f), sf::Vector2f(-21.f, -25.f), sf::Vector2f(-35.f, -50.f), sf::Vector2f(-21.f, -50.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-35.f, 0.f) } }), Renderer(startPosition)
+Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.f, -25.f), sf::Vector2f(-21.f, -25.f), sf::Vector2f(-35.f, -50.f), sf::Vector2f(-21.f, -50.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-35.f, 0.f) } }), Renderer(startPosition)
 {
 	maxSpeed = sf::Vector2f(150.f, 150.f);
 	maxSpeedInv = sf::Vector2f(-150.f, -150.f);
@@ -13,18 +13,18 @@ Player::Player(sf::Vector2f startPosition) : boundingBox({ { sf::Vector2f(-35.f,
 
 void Player::Move(sf::Time &frameTime)
 {
-	if (velocity.x > maxSpeed.x)
-		velocity.x -= 1.5f;
-	if (velocity.x < maxSpeedInv.x)
-		velocity.x += 1.5f;
+	if (m_velocity.x > maxSpeed.x)
+		m_velocity.x -= 1.5f;
+	if (m_velocity.x < maxSpeedInv.x)
+		m_velocity.x += 1.5f;
 
-	if (velocity.y > maxSpeed.y)
-		velocity.y -= 1.5f;
-	if (velocity.y < maxSpeedInv.y)
-		velocity.y += 1.5f;
+	if (m_velocity.y > maxSpeed.y)
+		m_velocity.y -= 1.5f;
+	if (m_velocity.y < maxSpeedInv.y)
+		m_velocity.y += 1.5f;
 
-	velocity += acceleration;
-	Renderer.Move(velocity, frameTime);
+	m_velocity += acceleration;
+	Renderer.Move(m_velocity, frameTime);
 }
 
 void Player::SetAcceleration(PlayerStates direction, bool attack, const std::string facingSide)
@@ -39,7 +39,7 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 		}
 		else
 			Renderer.ChangeAnimation(0);
-		if (velocity.y > 0)
+		if (m_velocity.y > 0)
 			acceleration.y = -2.5f;
 		else
 			acceleration.y = -speed;
@@ -52,7 +52,7 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 		}
 		else
 			Renderer.ChangeAnimation(1);
-		if (velocity.y < 0)
+		if (m_velocity.y < 0)
 			acceleration.y = 2.5f;
 		else
 		acceleration.y = speed;
@@ -66,7 +66,7 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 		}
 		else
 			Renderer.ChangeAnimation(2);
-		if (velocity.x < 0)
+		if (m_velocity.x < 0)
 			acceleration.x = 2.5f;
 		else
 		acceleration.x = speed;
@@ -79,7 +79,7 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 		}
 		else
 			Renderer.ChangeAnimation(3);
-		if (velocity.x > 0)
+		if (m_velocity.x > 0)
 			acceleration.x = -2.5f;
 		else
 		acceleration.x = -speed;
@@ -103,15 +103,15 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 		acceleration.x = 0.f;
 		acceleration.y = 0.f;
 
-		if (velocity.x != 0)
+		if (m_velocity.x != 0)
 		{
-			velocity.x -= (velocity.x) / 100.f;	
+			m_velocity.x -= (m_velocity.x) / 100.f;	
 			
 		}
 		
-		if (velocity.y != 0)
+		if (m_velocity.y != 0)
 		{
-			velocity.y -= (velocity.y) / 100.f;
+			m_velocity.y -= (m_velocity.y) / 100.f;
 		}
 		break;
 
@@ -119,20 +119,20 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 	
 }
 
-void Player::ResetVelocityX()
+void Player::Resetm_velocityX()
 {
-	velocity.x = 0;
+	m_velocity.x = 0;
 	acceleration.x = 0;
 }
-void Player::ResetVelocityY()
+void Player::Resetm_velocityY()
 {
-	velocity.y = 0;
+	m_velocity.y = 0;
 	acceleration.y = 0;
 }
 
 void Player::WallCollision(sf::Time &frameTime)
 {
-	Renderer.Move(-velocity, frameTime);
+	Renderer.Move(-m_velocity, frameTime);
 }
 
 void Player::Control()

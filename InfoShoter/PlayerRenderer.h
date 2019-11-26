@@ -6,21 +6,21 @@ class PlayerRenderer
 {
 private:
 
-	sf::Texture texture;
+	sf::Texture m_texture;
 
 	// set up the animations for all four directions (set spritesheet and push frames)
-	Animation walkingAnimationDown;
-	Animation walkingAnimationLeft;
-	Animation walkingAnimationRight;
-	Animation walkingAnimationUp;
-	Animation idleAnimation;
-	Animation attackAnimationDown;
-	Animation attackAnimationLeft;
-	Animation attackAnimationRight;
-	Animation attackAnimationUp;
+	Animation m_walkingAnimationDown;
+	Animation m_walkingAnimationLeft;
+	Animation m_walkingAnimationRight;
+	Animation m_walkingAnimationUp;
+	Animation m_idleAnimation;
+	Animation m_attackAnimationDown;
+	Animation m_attackAnimationLeft;
+	Animation m_attackAnimationRight;
+	Animation m_attackAnimationUp;
 
-	AnimatedSprite animatedSprite;
-	Animation* currentAnimation;
+	AnimatedSprite m_animatedSprite;
+	Animation* m_currentAnimation;
 
 public:
 

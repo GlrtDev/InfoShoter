@@ -6,20 +6,22 @@
 class EnemyRenderer
 {
 protected:
-	sf::Texture texture;
-	Animation walkingAnimationLeft;
-	Animation walkingAnimationRight;
+	sf::Texture m_texture;
+	Animation m_walkingAnimationLeft;
+	Animation m_walkingAnimationRight;
 
-	AnimatedSprite animatedSprite;
-	Animation* currentAnimation;
+	AnimatedSprite m_animatedSprite;
+	Animation* m_currentAnimation;
 
-	sf::RectangleShape healthBar;
-	sf::RectangleShape healthBarBackground;
-	sf::Vector2i healthBarOffset;
-	sf::CircleShape minimapDot;
-	sf::Vector2f minimapOffset;
+	sf::RectangleShape m_healthBar;
+	sf::RectangleShape m_healthBarBackground;
+	sf::Vector2i m_healthBarOffset;
+	sf::CircleShape m_minimapDot;
+	sf::Vector2f m_minimapOffset;
 
-	sf::CircleShape boundingBoxDots[4];
+	sf::CircleShape m_boundingBoxDots[4];
+
+	//bool dead;
 public:
 	EnemyRenderer();
 	~EnemyRenderer();

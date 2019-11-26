@@ -83,14 +83,14 @@ int GameScreen::Run(sf::RenderWindow & window)
 	bool waveStarted=false;
 	int waveNumber = 0;
 
-	Bat Bat(path[0]);
+	Bat* bat = new Bat(path[0]);
 	
 
-	enemySpawnQueue.push_back(Bat); 
-	enemySpawnQueue.push_back(Bat);
-	enemySpawnQueue.push_back(Bat);
-	enemySpawnQueue.push_back(Bat);
-	enemySpawnQueue.push_back(Bat);
+	enemySpawnQueue.push_back(*bat); 
+	enemySpawnQueue.push_back(*bat);
+	enemySpawnQueue.push_back(*bat);
+	enemySpawnQueue.push_back(*bat);
+	enemySpawnQueue.push_back(*bat);
 
 	while (Running)
 	{
@@ -110,11 +110,11 @@ int GameScreen::Run(sf::RenderWindow & window)
 			{
 				if (Event.key.code == sf::Keyboard::W || Event.key.code == sf::Keyboard::S) 
 				{
-					player.ResetVelocityY();
+					player.Resetm_velocityY();
 				}
 				if (Event.key.code == sf::Keyboard::A || Event.key.code == sf::Keyboard::D) 
 				{
-					player.ResetVelocityX();
+					player.Resetm_velocityX();
 				}
 			}
 			gui.handleEvent(Event);
@@ -150,9 +150,11 @@ int GameScreen::Run(sf::RenderWindow & window)
 
 		sf::Time duration = globalClock.getElapsedTime();
 		decorativeLayer.update(duration);
+
 		//COLISION DETECTION START
 		EventHandler::CollisionDetection(player, collisionLayer, frameTime, enemiesLiving); //walls collisions
 		//COLLISION DETECT END
+
 		window.clear(sf::Color::Black);
 
 		window.setView(view);

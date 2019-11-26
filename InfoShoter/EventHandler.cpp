@@ -7,7 +7,7 @@ void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisio
 
 	for (auto& object : collisionLayer.getObjects())
 	{
-		for (auto& point : player.boundingBox)
+		for (auto& point : player.m_boundingBox)
 		{
 
 			if (EventHandler::contains<tmx::Vector2f>(player.Renderer.GetPosition() - point, object.getPoints(), object.getPosition()))
@@ -21,10 +21,10 @@ void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisio
 	for (auto enemy = enemiesLiving.begin(); enemy != enemiesLiving.end(); ++enemy) {
 		
 		bool collisionFinished = false;
-		for (auto& point : player.boundingBox)
+		for (auto& point : player.m_boundingBox)
 		{
 			if(damagePeriod.asSeconds()> 0.05f)
-			if (EventHandler::contains<sf::Vector2f>(player.Renderer.GetPosition() - point, enemy->boundingBox, enemy->getPosition()))
+			if (EventHandler::contains<sf::Vector2f>(player.Renderer.GetPosition() - point, enemy->GetboundingBox(), enemy->getPosition()))
 			{
 				damagePeriod = sf::Time::Zero;
 				if (enemy->ReceiveDamage(player.GetDamage())) {

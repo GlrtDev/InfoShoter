@@ -10,7 +10,7 @@ public:
 	template<typename T>
 	static bool contains(sf::Vector2f point, std::vector<T> object, T position)
 	{
-		//if (m_shape == Polyline) return false;
+		//if (object.size() < 3) return false;
 
 		//check if enough poly points
 		//if (m_points.size() < 3) return false;

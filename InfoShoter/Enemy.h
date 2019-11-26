@@ -6,14 +6,15 @@
 class Enemy : public EnemyRenderer
 {
 protected:
-	float velocity;
-	std::queue<sf::Vector2f> path;
-	sf::Vector2f currentCheckpoint, nextCheckpoint;
-	int healthPoints;
-	int maxHealthPoints;
-	bool alive;
+	float m_velocity;
+	std::queue<sf::Vector2f> m_path;
+	//sf::Vector2f currentCheckpoint, nextCheckpoint;
+	int m_healthPoints;
+	int m_maxHealthPoints;
+	std::vector<sf::Vector2f> m_boundingBox;
+	//bool alive;
 public:
-	std::vector<sf::Vector2f> boundingBox;
+	std::vector<sf::Vector2f> GetboundingBox();
 	Enemy(std::queue<sf::Vector2f> path_);
 	~Enemy();
 	bool Move(sf::Vector2f targetPosition, sf::Time &frameTime);
