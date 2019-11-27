@@ -17,7 +17,7 @@ void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisio
 			}
 		}
 	}
-
+	if(player.IsAttacking())
 	for (auto enemy = enemiesLiving.begin(); enemy != enemiesLiving.end(); ++enemy) {
 		
 		bool collisionFinished = false;
@@ -29,6 +29,7 @@ void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisio
 				damagePeriod = sf::Time::Zero;
 				if (enemy->ReceiveDamage(player.GetDamage())) {
 					//int index = std::distance(enemiesLiving.begin(), enemy);
+					player.GainExp(enemy->GetExp());
 					enemiesLiving.erase(enemy);
 					//enemiesLiving.shrink_to_fit();
 					

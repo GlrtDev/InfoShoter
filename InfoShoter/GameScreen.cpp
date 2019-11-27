@@ -1,4 +1,6 @@
-#include <deque>
+#include <string>
+#include <math.h>
+#include <random>
 
 #include "GameScreen.h"
 
@@ -11,6 +13,7 @@
 
 #include "Player.h"
 #include "Bat.h"
+#include "Knight.h"
 #include "EventHandler.h"
 #include <vector>
 GameScreen::GameScreen(void)
@@ -41,9 +44,9 @@ int GameScreen::Run(sf::RenderWindow & window)
 	sf::CircleShape PlayerDotMiniMap;
 	PlayerDotMiniMap.setFillColor(sf::Color(250, 250, 50));
 	PlayerDotMiniMap.setRadius(10.f);
-
-	
-
+	//sf::RectangleShape minimapBackground;
+	//minimapBackground.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
+	//minimapBackground.setFillColor(sf::Color::Black);
 	
 	tmx::Map map;
 	map.load("../assets/Level1TileMap.tmx");
@@ -81,16 +84,47 @@ int GameScreen::Run(sf::RenderWindow & window)
 	std::vector<Enemy> enemiesLiving;
 	std::vector<Enemy> enemySpawnQueue;
 	bool waveStarted=false;
+	bool wavePrepared = false;
 	int waveNumber = 0;
-
-	Bat* bat = new Bat(path[0]);
+	int enemyUnitsPowerBase = 500;
+	int enemyUnitsPowerMultipler = 100;
+	std::default_random_engine randomNumberGenerator;
+	std::uniform_int_distribution<int> randRange(1, 100);
 	
 
-	enemySpawnQueue.push_back(*bat); 
-	enemySpawnQueue.push_back(*bat);
-	enemySpawnQueue.push_back(*bat);
-	enemySpawnQueue.push_back(*bat);
-	enemySpawnQueue.push_back(*bat);
+	auto waveText = tgui::Label::create();
+	waveText->getRenderer()->setFont(tgui::Font::Font("../assets/IMMORTAL.ttf"));
+	waveText->getRenderer()->setBorders(5);
+	waveText->getRenderer()->setBackgroundColor(tgui::Color::White);
+	waveText->setPosition(1570, 780);
+	waveText->setTextSize(28);
+
+	auto waveCounter = tgui::Label::create();
+	waveCounter->getRenderer()->setFont(tgui::Font::Font("../assets/IMMORTAL.ttf"));
+	waveCounter->getRenderer()->setTextColor(tgui::Color::Red);
+	waveCounter->getRenderer()->setTextOutlineColor(tgui::Color::Black);
+	waveCounter->setPosition(720, 450);
+	waveCounter->setTextSize(68);
+
+	auto experienceBar = tgui::ProgressBar::create();
+	experienceBar->setPosition(1520, 1015);
+	experienceBar->setSize(200, 20);
+	experienceBar->getRenderer()->setBorders(3);
+	experienceBar->getRenderer()->setFillColor(sf::Color(201, 129, 60, 200));
+
+	auto PlayerGui = tgui::Label::create();
+	PlayerGui->getRenderer()->setFont(tgui::Font::Font("../assets/IMMORTAL.ttf"));
+	PlayerGui->getRenderer()->setTextColor(tgui::Color::Black);
+	PlayerGui->getRenderer()->setBorders(5);
+	PlayerGui->getRenderer()->setBackgroundColor(tgui::Color::White);
+	PlayerGui->setPosition(1500, 790);
+	PlayerGui->setTextSize(28);
+
+	gui.add(waveCounter);
+	gui.add(PlayerGui);
+	gui.add(experienceBar);
+	gui.add(waveText);
+
 
 	while (Running)
 	{
@@ -127,26 +161,57 @@ int GameScreen::Run(sf::RenderWindow & window)
 		player.Control();
 		player.Move(frameTime);
 
-		if (timeBetwenWaves.getElapsedTime().asSeconds() > 1 && !waveStarted) {
+		
+		waveText->setText("wave:" + std::to_string(waveNumber));
+		waveCounter->setText("Wave start in:\n\n\t  " + std::to_string ((int)( 5 - timeBetwenWaves.getElapsedTime().asSeconds() )) );
+
+		if (timeBetwenWaves.getElapsedTime().asSeconds() > 5 && !waveStarted) { // wave is starting
 			waveStarted = true;
+			waveCounter->setVisible(false);
 			timeBetwenWaves.restart();
+			
+		}
+		else if (timeBetwenWaves.getElapsedTime().asSeconds() < 5 && !waveStarted && !wavePrepared) { // wave havent started , mobs preparing
+			int enemyUnitsPower = enemyUnitsPowerBase + waveNumber * enemyUnitsPowerMultipler;
+			int enemyType;
+			Bat* bat = new Bat(path[0], waveNumber);
+			Knight* knight = new Knight(path[0], waveNumber);
+			while (enemyUnitsPower > 0) {
+				enemyType = randRange(randomNumberGenerator) + waveNumber;
+				if (enemyType <= 60) {
+					enemySpawnQueue.push_back(*bat);
+					enemyUnitsPower -= 100 + waveNumber * 10;
+				}
+				else if (enemyType > 60) {
+					enemySpawnQueue.push_back(*knight);
+					enemyUnitsPower -= 100 + waveNumber * 10;
+				}
+			}
+			wavePrepared = true;
+			++waveNumber;
 		}
 
-			if (spawnPeriod.getElapsedTime().asSeconds() > 2 && !enemySpawnQueue.empty() && waveStarted) {
+			if (spawnPeriod.getElapsedTime().asSeconds() > 1.5f && !enemySpawnQueue.empty() && waveStarted) {
 				enemiesLiving.push_back(enemySpawnQueue.back());
 				enemySpawnQueue.pop_back();
 				spawnPeriod.restart();
 			}
 		
-			if (enemiesLiving.size() == 0 && waveStarted)
+			if (enemiesLiving.size() == 0 && waveStarted) {
 				waveStarted = false;
+				wavePrepared = false;
+				waveCounter->setVisible(true);
+			}
 
 			for (auto& liveEnemy : enemiesLiving) {
 				liveEnemy.FollowPath(frameTime);
 			}
 			//std::cout << waveStarted;
 
-
+			experienceBar->setValue(player.GetExpPercentage());
+			PlayerGui->setText("\n Level: " + std::to_string(player.GetLevel()) +
+				"\t\n Attack: " + std::to_string(player.GetDamage())
+				+ "\t\n Magic: 0  \t\n\n\t Exp\n");
 
 		sf::Time duration = globalClock.getElapsedTime();
 		decorativeLayer.update(duration);
@@ -169,10 +234,11 @@ int GameScreen::Run(sf::RenderWindow & window)
 		
 
 		window.setView(miniMap);
-
+		//window.draw(minimapBackground);
 		
 
 		window.draw(groundLayer);
+		
 		for (auto& en : enemiesLiving)
 			en.DrawOnMinimap(window);
 		window.draw(PlayerDotMiniMap);

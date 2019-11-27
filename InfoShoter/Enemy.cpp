@@ -7,7 +7,7 @@ std::vector<sf::Vector2f> Enemy::GetboundingBox()
 	return m_boundingBox;
 }
 
-Enemy::Enemy(std::queue<sf::Vector2f> path_) : m_path(path_)
+Enemy::Enemy(std::queue<sf::Vector2f> path_,int level_) : m_path(path_) , m_level(level_)
 {
 	
 }
@@ -90,4 +90,15 @@ void Enemy::KillThis()
 {
 	//delete this;
 	//dead = true;
+}
+
+void Enemy::InitializeEnemy()
+{
+	m_maxHealthPoints = m_baseHealth + m_level * m_healthLevelMultipler;
+	m_exp = m_baseExp + m_level * m_expMultipler;
+}
+
+int Enemy::GetExp()
+{
+	return m_exp;
 }

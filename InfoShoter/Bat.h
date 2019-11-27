@@ -3,5 +3,5 @@
 class Bat : public Enemy {
 
 public:
-	Bat(std::queue<sf::Vector2f> path_);
+	Bat(std::queue<sf::Vector2f> path_, int level_);
 };

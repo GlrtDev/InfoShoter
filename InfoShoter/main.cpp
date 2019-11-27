@@ -12,8 +12,8 @@ int main()
 	std::vector<cScreen*> Screens;
 	int screen = 0;
 
-	sf::RenderWindow window(sf::VideoMode(920, 500), "InfoShoter");
-	
+	sf::RenderWindow window(sf::VideoMode(1920, 1080), "InfoShoter");
+	window.setVerticalSyncEnabled(true);
 
 	
 	MenuScreen menuScreen;

@@ -1,6 +1,6 @@
 #include "Bat.h"
 
-Bat::Bat(std::queue<sf::Vector2f> path_) : Enemy(path_) {
+Bat::Bat(std::queue<sf::Vector2f> path_,int level_) : Enemy(path_, level_) {
 	if (!m_texture.loadFromFile("../Sprites/EnemySprites/eye monster idle.png"))
 	{
 		std::cout << "Failed to load bat moster spritesheet!" << std::endl;
@@ -24,6 +24,11 @@ Bat::Bat(std::queue<sf::Vector2f> path_) : Enemy(path_) {
 	m_healthBarOffset = sf::Vector2i(37, 72);
 	m_boundingBox = {sf::Vector2f(15.f,15.f),sf::Vector2f(70.f,70.f),sf::Vector2f(15.f,70.f), sf::Vector2f(70.f,15.f) };
 	m_minimapOffset = sf::Vector2f(35.f, 35.f);
-	m_healthPoints = 100;
-	m_maxHealthPoints = 100;
+	
+	m_baseHealth = 50;
+	m_healthLevelMultipler = 10;
+	m_baseExp = 10;
+	m_expMultipler = 2;
+	InitializeEnemy();
+	m_healthPoints = m_maxHealthPoints;
 }

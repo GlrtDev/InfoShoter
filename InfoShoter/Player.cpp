@@ -3,12 +3,13 @@
 
 //#define M_PI 3.14159265358979323846
 
-Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.f, -25.f), sf::Vector2f(-21.f, -25.f), sf::Vector2f(-35.f, -50.f), sf::Vector2f(-21.f, -50.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-35.f, 0.f) } }), Renderer(startPosition)
+Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.f, -25.f), sf::Vector2f(-21.f, -25.f), sf::Vector2f(-35.f, -50.f), sf::Vector2f(-21.f, -50.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-35.f, 0.f) } }), Renderer(startPosition), m_expNeededToLevelUp(100)
 {
 	maxSpeed = sf::Vector2f(150.f, 150.f);
 	maxSpeedInv = sf::Vector2f(-150.f, -150.f);
-	swordDamage = 5;
-
+	m_swordDamage = 5;
+	m_level = 1;
+	m_exp = 0;
 }
 
 void Player::Move(sf::Time &frameTime)
@@ -27,13 +28,13 @@ void Player::Move(sf::Time &frameTime)
 	Renderer.Move(m_velocity, frameTime);
 }
 
-void Player::SetAcceleration(PlayerStates direction, bool attack, const std::string facingSide)
+void Player::SetAcceleration(PlayerStates direction, bool m_isAttacking, const std::string facingSide)
 {
 	float speed = 1.5f;
 	switch (direction)
 	{
 	case UP:
-		if (attack) {
+		if (m_isAttacking) {
 			Renderer.ChangeAnimation(5);
 			speed = 1.f;
 		}
@@ -46,7 +47,7 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 		break;
 
 	case DOWN:
-		if (attack) {
+		if (m_isAttacking) {
 		Renderer.ChangeAnimation(6);
 		speed = 1.f;
 		}
@@ -60,7 +61,7 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 		break;
 
 	case RIGHT:
-		if (attack) {
+		if (m_isAttacking) {
 			Renderer.ChangeAnimation(7);
 			speed = 1.f;
 		}
@@ -73,7 +74,7 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 		break;
 
 	case LEFT:
-		if (attack) {
+		if (m_isAttacking) {
 			Renderer.ChangeAnimation(8);
 			speed = 1.f;
 		}
@@ -87,7 +88,7 @@ void Player::SetAcceleration(PlayerStates direction, bool attack, const std::str
 		break;
 
 	default:
-		if (attack) 
+		if (m_isAttacking) 
 		{
 			if (facingSide == "LEFT")
 				Renderer.ChangeAnimation(8);
@@ -137,53 +138,79 @@ void Player::WallCollision(sf::Time &frameTime)
 
 void Player::Control()
 {
-	swordDamage = 0;
-	bool attack = false;
+	m_isAttacking = false;
 	bool KeyPressed = false;
 	static std::string facingSide;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 	{
-		attack = true;
-		swordDamage = 5;
+		m_isAttacking = true;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
 		facingSide = "UP";
-		SetAcceleration(Player::PlayerStates::UP,attack,facingSide);
+		SetAcceleration(Player::PlayerStates::UP,m_isAttacking,facingSide);
 		KeyPressed = true;
 	}
 
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		facingSide = "DOWN";
-		SetAcceleration(Player::PlayerStates::DOWN,attack, facingSide);
+		SetAcceleration(Player::PlayerStates::DOWN,m_isAttacking, facingSide);
 		KeyPressed = true;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		facingSide = "LEFT";
-		SetAcceleration(Player::PlayerStates::LEFT, attack, facingSide);
+		SetAcceleration(Player::PlayerStates::LEFT, m_isAttacking, facingSide);
 		KeyPressed = true;
 	}
 
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		facingSide = "RIGHT";
-		SetAcceleration(Player::PlayerStates::RIGHT, attack, facingSide);
+		SetAcceleration(Player::PlayerStates::RIGHT, m_isAttacking, facingSide);
 		KeyPressed = true;
 	}
 	
 
 	if (!KeyPressed)
-		SetAcceleration(Player::PlayerStates::IDLE, attack, facingSide);
+		SetAcceleration(Player::PlayerStates::IDLE, m_isAttacking, facingSide);
 
 	Renderer.PlayAnimation();
 }
 
 int Player::GetDamage()
 {
-	return swordDamage;
+	return m_swordDamage;
+}
+
+bool Player::IsAttacking()
+{
+	return m_isAttacking;
+}
+
+int Player::GetLevel()
+{
+	return m_level;
+}
+
+void Player::GainExp(int experience)
+{
+	m_exp += experience;
+	if (m_exp >= m_expNeededToLevelUp * m_level)
+		LevelUp();
+}
+
+void Player::LevelUp()
+{
+	m_level += 1;
+	m_exp = 0;
+}
+
+int Player::GetExpPercentage()
+{
+	return (100 * m_exp) / (m_expNeededToLevelUp * m_level); // 100 at front stands for 100%
 }
 
