@@ -22,6 +22,7 @@ private:
 	AnimatedSprite m_animatedSprite;
 	Animation* m_currentAnimation;
 
+	sf::CircleShape m_PlayerDotMiniMap;
 public:
 
 	PlayerRenderer(sf::Vector2f startPosition);
@@ -33,6 +34,6 @@ public:
 	sf::Vector2f GetPosition();
 	void SetPosition(sf::Vector2f position_);
 	void Move(sf::Vector2f movement, sf::Time &frameTime);
-	
+	void DrawOnMinimap(sf::RenderWindow &window, sf::Time &frameTime);
 };
 

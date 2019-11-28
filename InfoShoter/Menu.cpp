@@ -1,29 +1,38 @@
 #include "Menu.h"
-#include <iostream>
-void Menu::StartHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, tgui::Button::Ptr nextBtt, tgui::Button::Ptr stBtt)
+
+//void Menu::StartHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, tgui::Button::Ptr nextBtt, tgui::Button::Ptr stBtt)
+//{
+//	cScreen::goNext = true;
+//}
+
+void Menu::SignalHandler(tgui::Widget::Ptr widget, const std::string& signalName, const sf::String& buttonText)
 {
+	if (buttonText.toAnsiString() == "Next") {
+		editBoxUsername->setVisible(false);
+		nextButton->setVisible(false);
+		listBox->setVisible(true);
+		listBox->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));
+		startButton->setVisible(true);
+		startButton->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));
+	}
+	//std::cout << buttonText.toAnsiString();
+	else if (buttonText.toAnsiString() == "Start")
 	cScreen::goNext = true;
 }
 
-void Menu::NextHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, tgui::Button::Ptr nextBtt, tgui::Button::Ptr stBtt)
-{
+//void Menu::NextHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, tgui::Button::Ptr nextBtt, tgui::Button::Ptr stBtt)
+//{
+	
+//}
 
-	username->setVisible(false);
-	nextBtt->setVisible(false);
-	listBox->setVisible(true);
-	listBox->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));
-	stBtt->setVisible(true);
-	stBtt->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));
-}
-
-void Menu::LoadMenuGUI(tgui::Gui &gui)
+Menu::Menu(tgui::Gui &gui)
 {
-	sf::Texture texture1, texture2;
 	if (!texture1.loadFromFile("../Sprites/Female Student 1/femalestudent1.png"))
 		std::cout << "chuj";
 	if (!texture2.loadFromFile("../Sprites/Female Student 2/femalestudent2.png"))
 		std::cout << "dupa";
-	auto picture = tgui::Picture::create(texture1);
+
+	picture = tgui::Picture::create(texture1);
 	picture->setSize({ "50%","100%" });
 	picture->setPosition({ "50%","3%" });
 	gui.add(picture);
@@ -35,7 +44,7 @@ void Menu::LoadMenuGUI(tgui::Gui &gui)
 	gui.add(picture);
 	picture->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(4000));
 
-	auto titleLabel = tgui::Label::create();
+	titleLabel = tgui::Label::create();
 	titleLabel->setSize({ "66.67%", "12.5%" });
 	titleLabel->setPosition({ "32%", "16.67%" });
 	titleLabel->setText("InfoShoter");
@@ -45,7 +54,7 @@ void Menu::LoadMenuGUI(tgui::Gui &gui)
 	titleLabel->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));
 	// Create the login button
 
-	auto editBoxUsername = tgui::EditBox::create();
+	editBoxUsername = tgui::EditBox::create();
 	editBoxUsername->setSize({ "25%", "12.5%" });
 	editBoxUsername->setPosition({ "37.5%", "50%" });
 	editBoxUsername->setDefaultText("Username");
@@ -54,7 +63,7 @@ void Menu::LoadMenuGUI(tgui::Gui &gui)
 	// Create the login button
 	
 
-	auto listBox = tgui::ListBox::create();
+	listBox = tgui::ListBox::create();
 	//listBox->setRenderer(theme.getRenderer("ListBox"));
 	listBox->setSize({ "20%", "30%" });
 	listBox->setItemHeight(24);
@@ -65,24 +74,23 @@ void Menu::LoadMenuGUI(tgui::Gui &gui)
 	gui.add(listBox);
 	listBox->setVisible(false);
 
-	// Call the login function when the button is pressed and pass the edit boxes that we created as parameters
-	auto nextButton = tgui::Button::create("Next");
+	nextButton = tgui::Button::create("Next");
 	nextButton->setSize({ "20%", "10.67%" });
 	nextButton->setPosition({ "40%", "70%" });
 	gui.add(nextButton,"NextnextButton");
 	nextButton->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));
 
 
-	auto startButton = tgui::Button::create("Start");
+	startButton = tgui::Button::create("Start");
 	startButton->setSize({ "20%", "10.67%" });
 	startButton->setPosition({ "40%", "70%" });
 	gui.add(startButton, "StartstartButton");
 	startButton->setVisible(false);
 	
 
-	nextButton->connect("pressed", NextHandler, listBox, editBoxUsername, nextButton, startButton);
-	startButton->connect("pressed", StartHandler, listBox, editBoxUsername, nextButton, startButton);
-	
+	//nextButton->connect("pressed", NextHandler, listBox, editBoxUsername, nextButton, startButton);
+	nextButton->connect("pressed", &Menu::SignalHandler, this);
+	startButton->connect("pressed", &Menu::SignalHandler, this); // THIS AT THE AND BECOZ MEMBER FUNCTIONS HAVE HIDDEN CLASS POINTER :)
 }
 
 void Menu::HideMenuGUI(tgui::Gui & gui)

@@ -5,90 +5,93 @@
 
 Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.f, -25.f), sf::Vector2f(-21.f, -25.f), sf::Vector2f(-35.f, -50.f), sf::Vector2f(-21.f, -50.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-35.f, 0.f) } }), Renderer(startPosition), m_expNeededToLevelUp(100)
 {
-	maxSpeed = sf::Vector2f(150.f, 150.f);
-	maxSpeedInv = sf::Vector2f(-150.f, -150.f);
+	m_speed = 2;
+	m_maxSpeed = sf::Vector2f(50.f * m_speed, 50.f * m_speed);
+	m_maxSpeedInv = sf::Vector2f(-50.f * m_speed, -50.f * m_speed);
 	m_swordDamage = 5;
 	m_level = 1;
 	m_exp = 0;
+	m_skillpoints = 0;
+	m_magicPower = 0;
 }
 
 void Player::Move(sf::Time &frameTime)
 {
-	if (m_velocity.x > maxSpeed.x)
-		m_velocity.x -= 1.5f;
-	if (m_velocity.x < maxSpeedInv.x)
-		m_velocity.x += 1.5f;
+	if (m_velocity.x > m_maxSpeed.x)
+		m_velocity.x -= m_acceleration.x;
+	if (m_velocity.x < m_maxSpeedInv.x)
+		m_velocity.x -= m_acceleration.x;
 
-	if (m_velocity.y > maxSpeed.y)
-		m_velocity.y -= 1.5f;
-	if (m_velocity.y < maxSpeedInv.y)
-		m_velocity.y += 1.5f;
+	if (m_velocity.y > m_maxSpeed.y)
+		m_velocity.y -= m_acceleration.y;
+	if (m_velocity.y < m_maxSpeedInv.y)
+		m_velocity.y -= m_acceleration.y;
 
-	m_velocity += acceleration;
+	m_velocity += m_acceleration;
 	Renderer.Move(m_velocity, frameTime);
 }
 
-void Player::SetAcceleration(PlayerStates direction, bool m_isAttacking, const std::string facingSide)
+void Player::SetAcceleration(PlayerStates direction, bool isAttacking, const std::string facingSide)
 {
-	float speed = 1.5f;
+	float speed = m_speed;
 	switch (direction)
 	{
 	case UP:
-		if (m_isAttacking) {
+		if (isAttacking) {
 			Renderer.ChangeAnimation(5);
-			speed = 1.f;
+			speed /= 2.f; //slower when attackin
 		}
 		else
 			Renderer.ChangeAnimation(0);
 		if (m_velocity.y > 0)
-			acceleration.y = -2.5f;
+			m_acceleration.y = -speed*1.5f; //quicker when turnin
 		else
-			acceleration.y = -speed;
+			m_acceleration.y = -speed;
 		break;
 
 	case DOWN:
-		if (m_isAttacking) {
+		if (isAttacking) {
 		Renderer.ChangeAnimation(6);
-		speed = 1.f;
+		speed /= 2.f;
 		}
 		else
 			Renderer.ChangeAnimation(1);
 		if (m_velocity.y < 0)
-			acceleration.y = 2.5f;
+			m_acceleration.y = speed * 1.5f;
 		else
-		acceleration.y = speed;
+		m_acceleration.y = speed;
 
 		break;
 
 	case RIGHT:
-		if (m_isAttacking) {
+		if (isAttacking) {
 			Renderer.ChangeAnimation(7);
-			speed = 1.f;
+			speed /= 2.f;
 		}
 		else
 			Renderer.ChangeAnimation(2);
 		if (m_velocity.x < 0)
-			acceleration.x = 2.5f;
+			m_acceleration.x = speed * 1.5f;
 		else
-		acceleration.x = speed;
+		m_acceleration.x = speed;
 		break;
 
 	case LEFT:
-		if (m_isAttacking) {
+		if (isAttacking) {
 			Renderer.ChangeAnimation(8);
-			speed = 1.f;
+			speed /= 2.f;
 		}
 		else
 			Renderer.ChangeAnimation(3);
 		if (m_velocity.x > 0)
-			acceleration.x = -2.5f;
+			m_acceleration.x = -speed * 1.5f;
 		else
-		acceleration.x = -speed;
+		m_acceleration.x = -speed;
 
 		break;
 
 	default:
-		if (m_isAttacking) 
+		if (isAttacking) 
 		{
 			if (facingSide == "LEFT")
 				Renderer.ChangeAnimation(8);
@@ -101,8 +104,8 @@ void Player::SetAcceleration(PlayerStates direction, bool m_isAttacking, const s
 		}
 		else
 			Renderer.ChangeAnimation(4);
-		acceleration.x = 0.f;
-		acceleration.y = 0.f;
+		m_acceleration.x = 0.f;
+		m_acceleration.y = 0.f;
 
 		if (m_velocity.x != 0)
 		{
@@ -123,12 +126,12 @@ void Player::SetAcceleration(PlayerStates direction, bool m_isAttacking, const s
 void Player::Resetm_velocityX()
 {
 	m_velocity.x = 0;
-	acceleration.x = 0;
+	m_acceleration.x = 0;
 }
 void Player::Resetm_velocityY()
 {
 	m_velocity.y = 0;
-	acceleration.y = 0;
+	m_acceleration.y = 0;
 }
 
 void Player::WallCollision(sf::Time &frameTime)
@@ -179,6 +182,7 @@ void Player::Control()
 		SetAcceleration(Player::PlayerStates::IDLE, m_isAttacking, facingSide);
 
 	Renderer.PlayAnimation();
+	AssignSkillpoints();
 }
 
 int Player::GetDamage()
@@ -206,11 +210,42 @@ void Player::GainExp(int experience)
 void Player::LevelUp()
 {
 	m_level += 1;
+	++m_skillpoints;
 	m_exp = 0;
+
 }
 
 int Player::GetExpPercentage()
 {
 	return (100 * m_exp) / (m_expNeededToLevelUp * m_level); // 100 at front stands for 100%
 }
+
+int Player::GetSpeed()
+{
+	return m_speed-1;
+}
+
+int Player::GetSkillpoints()
+{
+	return m_skillpoints;
+}
+
+void Player::AssignSkillpoints()
+{
+	if (m_skillpoints > 0) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) { m_swordDamage += 1; m_skillpoints--; }
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) { m_magicPower += 1; m_skillpoints--; }
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) { 
+			m_speed += 1; m_skillpoints--;
+			m_maxSpeed = sf::Vector2f(50.f * m_speed, 50.f * m_speed);
+			m_maxSpeedInv = sf::Vector2f(-50.f * m_speed, -50.f * m_speed);
+		}
+	}
+}
+
+int Player::GetMagicPower()
+{
+	return m_magicPower;
+}
+
 

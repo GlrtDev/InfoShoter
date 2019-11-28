@@ -61,6 +61,9 @@ PlayerRenderer::PlayerRenderer(sf::Vector2f startPosition) : m_animatedSprite(sf
 	m_currentAnimation = &m_idleAnimation;
 	m_animatedSprite.play(*m_currentAnimation);
 	m_animatedSprite.setScale(sf::Vector2f(0.7f, 0.7f));
+
+	m_PlayerDotMiniMap.setFillColor(sf::Color(250, 250, 50));
+	m_PlayerDotMiniMap.setRadius(10.f);
 }
 
 
@@ -113,7 +116,11 @@ void PlayerRenderer::Draw(sf::RenderWindow &window, sf::Time &frameTime)
 	m_animatedSprite.update(frameTime);
 	window.draw(m_animatedSprite);
 }
-
+void PlayerRenderer::DrawOnMinimap(sf::RenderWindow &window, sf::Time &frameTime)
+{
+	m_PlayerDotMiniMap.setPosition(GetPosition());
+	window.draw(m_PlayerDotMiniMap);
+}
 sf::Vector2f PlayerRenderer::GetPosition()
 {
 	return m_animatedSprite.getPosition();

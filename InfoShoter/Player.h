@@ -10,16 +10,19 @@ class Player
 {
 private:
 	sf::Vector2f m_velocity; //sped
-	sf::Vector2f acceleration;
-	sf::Vector2f maxSpeed, maxSpeedInv;
-	int gold;
-	int score;
+	sf::Vector2f m_acceleration;
+	sf::Vector2f m_maxSpeed, m_maxSpeedInv;
+	//int gold;
+	//int score;
 	int m_level;
 	int m_swordDamage;
-	std::list<Gun> Guns;
+	std::list<Gun> Guns; //TO DO
 	bool m_isAttacking;
 	const int m_expNeededToLevelUp;
 	int m_exp;
+	float m_speed;
+	int m_skillpoints;
+	int m_magicPower;
 public:
 	std::array<sf::Vector2f, 6> m_boundingBox;
 
@@ -38,4 +41,8 @@ public:
 	void GainExp(int experience);
 	void LevelUp();
 	int GetExpPercentage();
+	int GetSpeed();
+	int GetSkillpoints();
+	void AssignSkillpoints();
+	int GetMagicPower();
 };

@@ -12,10 +12,10 @@ int MenuScreen::Run(sf::RenderWindow & window)
 	bool Running = true;
 	sf::Event Event;
 	tgui::Gui gui{ window };
-	
+	Menu menu(gui);
 	try
 	{
-		Menu::LoadMenuGUI(gui);
+		//menu.LoadMenuGUI(gui);
 	}
 	catch (const tgui::Exception& e)
 	{

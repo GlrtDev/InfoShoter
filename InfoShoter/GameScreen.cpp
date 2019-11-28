@@ -12,6 +12,7 @@
 #include <tmxlite/Map.hpp>
 
 #include "Player.h"
+#include "GameGui.h"
 #include "Bat.h"
 #include "Knight.h"
 #include "EventHandler.h"
@@ -30,24 +31,14 @@ int GameScreen::Run(sf::RenderWindow & window)
 	
 	sf::View view;
 	view.setViewport(sf::FloatRect(0.f, 0.f, 2.25f, 4.f)); // 9:16
-	
-
 	sf::View miniMap;
 	miniMap.setViewport(sf::FloatRect(0.f, 0.75f, 0.25f, 0.25f)); // 9:16
-	
 	sf::Vector2f cameraCorrection(310.f, 400.f);
+
 	bool Running = true;
 	sf::Event Event;
 	tgui::Gui gui{ window };
 
-	//TO DO (make this prettier)
-	sf::CircleShape PlayerDotMiniMap;
-	PlayerDotMiniMap.setFillColor(sf::Color(250, 250, 50));
-	PlayerDotMiniMap.setRadius(10.f);
-	//sf::RectangleShape minimapBackground;
-	//minimapBackground.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
-	//minimapBackground.setFillColor(sf::Color::Black);
-	
 	tmx::Map map;
 	map.load("../assets/Level1TileMap.tmx");
 	
@@ -81,6 +72,8 @@ int GameScreen::Run(sf::RenderWindow & window)
 	sf::Vector2f startPosition(350.f, 300.f);
 	Player player(startPosition);
 
+	
+	//TO DO, make separate class from this
 	std::vector<Enemy> enemiesLiving;
 	std::vector<Enemy> enemySpawnQueue;
 	bool waveStarted=false;
@@ -91,41 +84,8 @@ int GameScreen::Run(sf::RenderWindow & window)
 	std::default_random_engine randomNumberGenerator;
 	std::uniform_int_distribution<int> randRange(1, 100);
 	
-
-	auto waveText = tgui::Label::create();
-	waveText->getRenderer()->setFont(tgui::Font::Font("../assets/IMMORTAL.ttf"));
-	waveText->getRenderer()->setBorders(5);
-	waveText->getRenderer()->setBackgroundColor(tgui::Color::White);
-	waveText->setPosition(1570, 780);
-	waveText->setTextSize(28);
-
-	auto waveCounter = tgui::Label::create();
-	waveCounter->getRenderer()->setFont(tgui::Font::Font("../assets/IMMORTAL.ttf"));
-	waveCounter->getRenderer()->setTextColor(tgui::Color::Red);
-	waveCounter->getRenderer()->setTextOutlineColor(tgui::Color::Black);
-	waveCounter->setPosition(720, 450);
-	waveCounter->setTextSize(68);
-
-	auto experienceBar = tgui::ProgressBar::create();
-	experienceBar->setPosition(1520, 1015);
-	experienceBar->setSize(200, 20);
-	experienceBar->getRenderer()->setBorders(3);
-	experienceBar->getRenderer()->setFillColor(sf::Color(201, 129, 60, 200));
-
-	auto PlayerGui = tgui::Label::create();
-	PlayerGui->getRenderer()->setFont(tgui::Font::Font("../assets/IMMORTAL.ttf"));
-	PlayerGui->getRenderer()->setTextColor(tgui::Color::Black);
-	PlayerGui->getRenderer()->setBorders(5);
-	PlayerGui->getRenderer()->setBackgroundColor(tgui::Color::White);
-	PlayerGui->setPosition(1500, 790);
-	PlayerGui->setTextSize(28);
-
-	gui.add(waveCounter);
-	gui.add(PlayerGui);
-	gui.add(experienceBar);
-	gui.add(waveText);
-
-
+	GameGui gameGui(gui, &player, &timeBetwenWaves,&waveNumber);
+	
 	while (Running)
 	{
 		view.setCenter(player.Renderer.GetPosition()+ cameraCorrection);
@@ -154,20 +114,16 @@ int GameScreen::Run(sf::RenderWindow & window)
 			gui.handleEvent(Event);
 		}
 
-		
-		PlayerDotMiniMap.setPosition(player.Renderer.GetPosition());
-
 		//std::cout << std::endl << player.Renderer.GetPosition().x<<" " << player.Renderer.GetPosition().y;
 		player.Control();
 		player.Move(frameTime);
 
+		gameGui.Update();
 		
-		waveText->setText("wave:" + std::to_string(waveNumber));
-		waveCounter->setText("Wave start in:\n\n\t  " + std::to_string ((int)( 5 - timeBetwenWaves.getElapsedTime().asSeconds() )) );
 
 		if (timeBetwenWaves.getElapsedTime().asSeconds() > 5 && !waveStarted) { // wave is starting
 			waveStarted = true;
-			waveCounter->setVisible(false);
+			gameGui.HideCounter();
 			timeBetwenWaves.restart();
 			
 		}
@@ -200,7 +156,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 			if (enemiesLiving.size() == 0 && waveStarted) {
 				waveStarted = false;
 				wavePrepared = false;
-				waveCounter->setVisible(true);
+				gameGui.ShowCounter();
 			}
 
 			for (auto& liveEnemy : enemiesLiving) {
@@ -208,10 +164,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 			}
 			//std::cout << waveStarted;
 
-			experienceBar->setValue(player.GetExpPercentage());
-			PlayerGui->setText("\n Level: " + std::to_string(player.GetLevel()) +
-				"\t\n Attack: " + std::to_string(player.GetDamage())
-				+ "\t\n Magic: 0  \t\n\n\t Exp\n");
+			
 
 		sf::Time duration = globalClock.getElapsedTime();
 		decorativeLayer.update(duration);
@@ -219,6 +172,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 		//COLISION DETECTION START
 		EventHandler::CollisionDetection(player, collisionLayer, frameTime, enemiesLiving); //walls collisions
 		//COLLISION DETECT END
+
 
 		window.clear(sf::Color::Black);
 
@@ -241,7 +195,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 		
 		for (auto& en : enemiesLiving)
 			en.DrawOnMinimap(window);
-		window.draw(PlayerDotMiniMap);
+		player.Renderer.DrawOnMinimap(window, frameTime); // TODO:  do not do this like this
 		gui.draw();
 		//player.Renderer.Draw(window, frameTime);
 		//window.draw(upperGroundLayer);

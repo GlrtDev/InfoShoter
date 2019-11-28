@@ -15,8 +15,7 @@ Bat::Bat(std::queue<sf::Vector2f> path_,int level_) : Enemy(path_, level_) {
 	for (int i = 4; i < 8; i++)
 		m_walkingAnimationRight.addFrame(sf::IntRect(320 * i, 0, 320, 320));
 	m_velocity = 70.f;
-	sf::Vector2f startPosition(m_path.front());
-	m_path.pop();
+	sf::Vector2f startPosition(m_path.front());  m_path.pop();
 	m_animatedSprite.setPosition(startPosition);
 	m_currentAnimation = &m_walkingAnimationLeft;
 	m_animatedSprite.play(*m_currentAnimation);
