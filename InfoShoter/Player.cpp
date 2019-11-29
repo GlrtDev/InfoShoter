@@ -13,6 +13,7 @@ Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.
 	m_exp = 0;
 	m_skillpoints = 0;
 	m_magicPower = 0;
+	m_currentMagic = new Magic(1);
 }
 
 void Player::Move(sf::Time &frameTime)
@@ -31,7 +32,7 @@ void Player::Move(sf::Time &frameTime)
 	Renderer.Move(m_velocity, frameTime);
 }
 
-void Player::SetAcceleration(PlayerStates direction, bool isAttacking, const std::string facingSide)
+void Player::SetAcceleration(PlayerStates direction, bool isAttacking, const std::string lastFacingSide)
 {
 	float speed = m_speed;
 	switch (direction)
@@ -93,11 +94,11 @@ void Player::SetAcceleration(PlayerStates direction, bool isAttacking, const std
 	default:
 		if (isAttacking) 
 		{
-			if (facingSide == "LEFT")
+			if (lastFacingSide == "LEFT")
 				Renderer.ChangeAnimation(8);
-			else if (facingSide == "RIGHT")
+			else if (lastFacingSide == "RIGHT")
 				Renderer.ChangeAnimation(7);
-			else if (facingSide == "UP")
+			else if (lastFacingSide == "UP")
 				Renderer.ChangeAnimation(5);
 			else
 				Renderer.ChangeAnimation(6);
@@ -143,7 +144,8 @@ void Player::Control()
 {
 	m_isAttacking = false;
 	bool KeyPressed = false;
-	static std::string facingSide;
+	static std::string lastFacingSide;
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 	{
 		m_isAttacking = true;
@@ -151,35 +153,40 @@ void Player::Control()
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		facingSide = "UP";
-		SetAcceleration(Player::PlayerStates::UP,m_isAttacking,facingSide);
+		lastFacingSide = "UP";
+		SetAcceleration(Player::PlayerStates::UP,m_isAttacking,lastFacingSide);
 		KeyPressed = true;
 	}
 
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		facingSide = "DOWN";
-		SetAcceleration(Player::PlayerStates::DOWN,m_isAttacking, facingSide);
+		lastFacingSide = "DOWN";
+		SetAcceleration(Player::PlayerStates::DOWN,m_isAttacking, lastFacingSide);
 		KeyPressed = true;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		facingSide = "LEFT";
-		SetAcceleration(Player::PlayerStates::LEFT, m_isAttacking, facingSide);
+		lastFacingSide = "LEFT";
+		SetAcceleration(Player::PlayerStates::LEFT, m_isAttacking, lastFacingSide);
 		KeyPressed = true;
 	}
 
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		facingSide = "RIGHT";
-		SetAcceleration(Player::PlayerStates::RIGHT, m_isAttacking, facingSide);
+		lastFacingSide = "RIGHT";
+		SetAcceleration(Player::PlayerStates::RIGHT, m_isAttacking, lastFacingSide);
 		KeyPressed = true;
 	}
 	
 
 	if (!KeyPressed)
-		SetAcceleration(Player::PlayerStates::IDLE, m_isAttacking, facingSide);
+		SetAcceleration(Player::PlayerStates::IDLE, m_isAttacking, lastFacingSide);
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
+	{
+		m_currentMagic->ShotProjectile(lastFacingSide, Renderer.GetPosition());
+	}
 
 	Renderer.PlayAnimation();
 	AssignSkillpoints();
@@ -246,6 +253,11 @@ void Player::AssignSkillpoints()
 int Player::GetMagicPower()
 {
 	return m_magicPower;
+}
+
+void Player::DrawProjectilesTest(sf::RenderWindow & window, sf::Time & frameTime)
+{
+	m_currentMagic->DrawProjectiles(window, frameTime);
 }
 
 

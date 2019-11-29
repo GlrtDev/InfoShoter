@@ -134,13 +134,15 @@
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="GameGui.cpp" />
     <ClCompile Include="GameScreen.cpp" />
-    <ClCompile Include="Gun.cpp" />
     <ClCompile Include="Knight.cpp" />
+    <ClCompile Include="Magic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuScreen.cpp" />
+    <ClCompile Include="ParticleRenderer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerRenderer.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="sprawozdanie.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
@@ -157,13 +159,15 @@
     <ClInclude Include="EventHandler.h" />
     <ClInclude Include="GameGui.h" />
     <ClInclude Include="GameScreen.h" />
-    <ClInclude Include="Gun.h" />
     <ClInclude Include="IngameGUI.h" />
     <ClInclude Include="Knight.h" />
+    <ClInclude Include="Magic.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuScreen.h" />
+    <ClInclude Include="ParticleRenderer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerRenderer.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Screens.h" />
     <ClInclude Include="SFMLOrthogonalLayer.hpp" />
   </ItemGroup>

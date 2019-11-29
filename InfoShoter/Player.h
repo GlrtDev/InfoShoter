@@ -1,10 +1,11 @@
 #pragma once
-#include "gun.h"
 #include <list>
 #include <SFML/System/Vector2.hpp>
 #include "PlayerRenderer.h"
 #include <array>
 #include <string>
+#include <vector>
+#include "Magic.h"
 
 class Player
 {
@@ -12,11 +13,10 @@ private:
 	sf::Vector2f m_velocity; //sped
 	sf::Vector2f m_acceleration;
 	sf::Vector2f m_maxSpeed, m_maxSpeedInv;
-	//int gold;
-	//int score;
+	std::vector<Magic> m_magics;
+	Magic* m_currentMagic;
 	int m_level;
 	int m_swordDamage;
-	std::list<Gun> Guns; //TO DO
 	bool m_isAttacking;
 	const int m_expNeededToLevelUp;
 	int m_exp;
@@ -30,7 +30,7 @@ public:
 	Player(sf::Vector2f startPosition);
 	PlayerRenderer Renderer;
 	void Move(sf::Time &frameTime);
-	void SetAcceleration(PlayerStates direction, bool m_isAttacking, const std::string facingSide);
+	void SetAcceleration(PlayerStates direction, bool m_isAttacking, const std::string lastFacingSide);
 	void Resetm_velocityX();
 	void Resetm_velocityY();
 	void WallCollision(sf::Time &frameTime);
@@ -45,4 +45,5 @@ public:
 	int GetSkillpoints();
 	void AssignSkillpoints();
 	int GetMagicPower();
+	void DrawProjectilesTest(sf::RenderWindow & window, sf::Time & frameTime);
 };

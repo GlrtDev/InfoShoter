@@ -178,7 +178,9 @@ int GameScreen::Run(sf::RenderWindow & window)
 
 		window.setView(view);
 		window.draw(groundLayer);
+		player.DrawProjectilesTest(window, frameTime);
 		player.Renderer.Draw(window, frameTime);
+		
 		window.draw(upperGroundLayer);
 
 		for (auto& en : enemiesLiving)

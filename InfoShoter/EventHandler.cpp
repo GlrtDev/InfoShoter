@@ -1,5 +1,5 @@
 #include "EventHandler.h"
-//template <typename T>
+
 void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisionLayer, sf::Time frameTime, std::vector<Enemy> &enemiesLiving)
 {
 	static sf::Time damagePeriod; 
