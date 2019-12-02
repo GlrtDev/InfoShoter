@@ -13,7 +13,7 @@ private:
 	sf::Vector2f m_velocity; //sped
 	sf::Vector2f m_acceleration;
 	sf::Vector2f m_maxSpeed, m_maxSpeedInv;
-	std::vector<Magic> m_magics;
+	//std::vector<Magic> m_magics;
 	Magic* m_currentMagic;
 	int m_level;
 	int m_swordDamage;
@@ -45,5 +45,6 @@ public:
 	int GetSkillpoints();
 	void AssignSkillpoints();
 	int GetMagicPower();
+	Magic* GetCurrentMagic();
 	void DrawProjectilesTest(sf::RenderWindow & window, sf::Time & frameTime);
 };

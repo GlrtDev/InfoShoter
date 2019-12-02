@@ -13,7 +13,8 @@ Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.
 	m_exp = 0;
 	m_skillpoints = 0;
 	m_magicPower = 0;
-	m_currentMagic = new Magic(1);
+	m_currentMagic = new Magic(1,11.f); // the second should be frame Time *1000
+	//m_currentMagic = nullptr;
 }
 
 void Player::Move(sf::Time &frameTime)
@@ -185,9 +186,10 @@ void Player::Control()
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
 	{
+		if (m_currentMagic != nullptr)
 		m_currentMagic->ShotProjectile(lastFacingSide, Renderer.GetPosition());
 	}
-
+	//TO DO make this look good
 	Renderer.PlayAnimation();
 	AssignSkillpoints();
 }
@@ -255,8 +257,14 @@ int Player::GetMagicPower()
 	return m_magicPower;
 }
 
+Magic * Player::GetCurrentMagic()
+{
+	return m_currentMagic;
+}
+
 void Player::DrawProjectilesTest(sf::RenderWindow & window, sf::Time & frameTime)
 {
+	if(m_currentMagic != nullptr)
 	m_currentMagic->DrawProjectiles(window, frameTime);
 }
 

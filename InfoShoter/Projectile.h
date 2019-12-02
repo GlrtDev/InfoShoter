@@ -5,10 +5,14 @@ class Projectile :
 {
 	int m_damage;
 	int m_speed;
-	const std::string m_facingSide;
+	int m_type;
+	std::string m_facingSide;
+	bool m_readyToDie;
 public:
-	Projectile(int damage, int speed,int type, const std::string FacingSide, sf::Vector2f startPosition);
+	Projectile(int damage, int speed,int type);
 	~Projectile();
 	void Move(sf::Time &frameTime);
+	void SetDirection(const std::string FacingSide, sf::Vector2f startPosition);
+	bool CheckStatus();
 };
 

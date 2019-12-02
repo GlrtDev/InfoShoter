@@ -5,21 +5,30 @@
 #include <SFML/System/Time.hpp>
 #include <string>
 #include <vector>
+#include <TGUI/Widgets/Picture.hpp>
 class Magic
 {
-	sf::Sprite m_icon;
+	sf::Texture m_iconTexture;
+	//sf::Texture m_icon;
 	std::string m_name;
 	std::vector<Projectile> m_projectiles;
 	int m_damage;
 	int m_speed;
 	int m_manaCost;
-	float m_rechargeTime;
+	float m_rechargeTime; // in sec
 	int m_type; // 0 fire , 1 ice , 2 wind
+	Projectile* projectile;
 public:
-	Magic(int level);
+	Magic(int level, float seedAsFrameTimeSec);
 	~Magic();
 	void ShotProjectile(const std::string lastFacingSide,sf::Vector2f startPosition);
 	void DrawProjectiles(sf::RenderWindow & window, sf::Time & frameTime);
-
+	std::string GetName();
+	int GetDamage();
+	int GetSpeed();
+	int GetManaCost();
+	float GetRechargeTime();
+	int GetType();
+	sf::Texture GetIconTexture();
 };
 

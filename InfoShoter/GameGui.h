@@ -5,8 +5,9 @@
 class GameGui
 {
 private:
-	tgui::Label::Ptr m_waveText, m_waveCounter, m_playerMainGui, m_levelUpHelp;
+	tgui::Label::Ptr m_waveText, m_waveCounter, m_playerMainGui, m_levelUpHelp, m_magicGui, m_magicIconBG;
 	tgui::ProgressBar::Ptr m_experienceBar;
+	tgui::Picture::Ptr m_magicIcon;
 	Player* m_player;
 	sf::Clock* m_timeBetweenWaves;
 	int* m_waveNumber;
