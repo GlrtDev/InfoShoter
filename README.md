@@ -1,2 +1,4 @@
 # InfoShoter
-Projekt na informatyke 2 , AiR
+Simple RPG/TD game made for study project.
+
+Made in SFML with TGUI and TMX mapLoader.
