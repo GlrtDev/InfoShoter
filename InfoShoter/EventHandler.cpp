@@ -38,7 +38,7 @@ void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisio
 				if (enemy->ReceiveDamage(player.GetDamage())) {
 					//int index = std::distance(enemiesLiving.begin(), enemy);
 					if (randomNumber() <= 9) {
-						Magic* lootMagic = new Magic(enemy->GetLevel(), frameTime.asMicroseconds()* 100);
+						Magic* lootMagic = new Magic(enemy->GetLevel(), frameTime.asMicroseconds()* 100,player.GetMagicPower());
 						player.SetEquipableMagic(lootMagic);
 					}
 					player.GainExp(enemy->GetExp());

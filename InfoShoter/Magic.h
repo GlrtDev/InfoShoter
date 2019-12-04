@@ -19,10 +19,11 @@ class Magic
 	int m_type; // 0 fire , 1 ice , 2 wind
 	Projectile* projectile;
 	bool m_projectileLoaded;
+	int m_playerMagicLevel;
 public:
-	Magic(int level, float seedAsFrameTimeSec);
+	Magic(int level, float seedAsFrameTimeSec, int playerMagicLevel);
 	~Magic();
-	void ShotProjectile(const std::string lastFacingSide,sf::Vector2f startPosition);
+	bool ShotProjectile(const std::string lastFacingSide,sf::Vector2f startPosition);
 	void DrawProjectiles(sf::RenderWindow & window, sf::Time & frameTime);
 	std::string GetName();
 	int GetDamage();
@@ -33,5 +34,6 @@ public:
 	sf::Texture GetIconTexture();
 	int CalculateRecharge(sf::Time & frameTime);
 	std::vector<Projectile>* GetProjectiles();
+	void LevelUp();
 };
 

@@ -77,6 +77,13 @@ GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int
 	m_lootMagicGui->setPosition(1170, 695);
 	m_lootMagicGui->setTextSize(28);
 
+	m_manaBar = tgui::ProgressBar::create();
+	m_manaBar->getRenderer()->setFillColor(sf::Color(0, 50, 200, 255));
+	m_manaBar->getRenderer()->setBackgroundColor(sf::Color(0, 0, 20, 255));
+	m_manaBar->setPosition(1190, 857);
+	m_manaBar->setTextSize(18);
+	m_manaBar->setSize(300, 35);
+
 	gui.add(m_waveCounter);
 	gui.add(m_playerMainGui);
 	gui.add(m_experienceBar);
@@ -86,6 +93,7 @@ GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int
 	gui.add(m_magicIcon);
 	gui.add(m_magicReloadFilm);
 	gui.add(m_lootMagicGui);
+	gui.add(m_manaBar);
 
 	m_levelUpHelp = tgui::Label::create();
 	m_levelUpHelp->getRenderer()->setFont(tgui::Font::Font("../assets/IMMORTAL.ttf"));
@@ -124,32 +132,38 @@ void GameGui::Update()
 		m_magicIcon->setVisible(true);
 		m_magicIconBG->setVisible(true);
 		m_magicReloadFilm->setVisible(true);
+		m_manaBar->setVisible(true);
 		m_magicGui->setText(" " + magic->GetName() +
-			" \n\t\t\t Damage: " + to_string_with_precision(magic->GetDamage() * (1 + m_player->GetMagicPower()/2.0),1) +
-			" \n\t\t\t Speed: " + to_string_with_precision(magic->GetSpeed() * (1 + m_player->GetMagicPower() / 2.0), 1) +
+			" \n\t\t\t Damage: " + to_string_with_precision(magic->GetDamage(), 1) +
+			" \n\t\t\t Speed: " + to_string_with_precision(magic->GetSpeed(), 1) +
 			" \n\t\t\t Mana Cost: " + std::to_string(magic->GetManaCost()));
 		m_magicReloadFilm->setValue(magic->CalculateRecharge(*m_frameTime));
+		m_manaBar->setText("Mana: " + to_string_with_precision(m_player->GetMana(), 1));
+		m_manaBar->setValue(m_player->GetManaPercentage());
 	}
 	else {
 		m_magicGui->setVisible(false);
 		m_magicIcon->setVisible(false);
 		m_magicIconBG->setVisible(false);
 		m_magicReloadFilm->setVisible(false);
+		m_manaBar->setVisible(false);
 	}
 
 	Magic* lootMagic = m_player->GetEquipableMagic();
 	if (lootMagic != nullptr) {
 		m_lootMagicGui->setVisible(true);
 		m_lootMagicGui->setText("\t NEW MAGIC FOUND!"
-			" \n\t\t\t| Damage: " + to_string_with_precision(lootMagic->GetDamage() * (1 + m_player->GetMagicPower() / 2.0), 1) +
-			" \n[E] equip   | Speed: " + to_string_with_precision(lootMagic->GetSpeed() * (1 + m_player->GetMagicPower() / 2.0), 1) +
+			" \n\t\t\t| Damage: " + to_string_with_precision(lootMagic->GetDamage(), 1) +
+			" \n[E] equip   | Speed: " + to_string_with_precision(lootMagic->GetSpeed(), 1) +
 			" \n[Q] dismiss | Mana Cost: " + std::to_string(lootMagic->GetManaCost()));
 	}
 	else {
 		m_lootMagicGui->setVisible(false);
 	}
 	if (m_player->GetSkillpoints()) {
-		m_levelUpHelp->setText("  Level Up!\n Skill Points: " + std::to_string(m_player->GetSkillpoints()) + " \n     Click:\n 1 for attack\n 2 for magic\n 3 for speed");
+		m_levelUpHelp->setText("  Level Up!\n Skill Points: " 
+			+ std::to_string(m_player->GetSkillpoints()) 
+			+ " \n     Click:\n [1] for attack\n [2] for magic\n [3] for speed");
 		ShowLevelUpHelp();
 	}
 	else

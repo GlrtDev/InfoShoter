@@ -74,6 +74,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 
 	
 	//TO DO, make separate class from this
+	//Enemy::InitialLoad();
 	std::vector<Enemy> enemiesLiving;
 	std::vector<Enemy> enemySpawnQueue;
 	bool waveStarted=false;
@@ -117,7 +118,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 		//std::cout << std::endl << player.Renderer.GetPosition().x<<" " << player.Renderer.GetPosition().y;
 		player.Control();
 		player.Move(frameTime);
-
+		player.Update(frameTime);
 		gameGui.Update();
 		
 

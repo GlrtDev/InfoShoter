@@ -24,6 +24,9 @@ private:
 	float m_speed;
 	int m_skillpoints;
 	int m_magicPower;
+	int m_maxMana;
+	float m_mana;
+	float m_swordDamageMultipler;
 public:
 	std::array<sf::Vector2f, 6> m_boundingBox;
 
@@ -50,4 +53,7 @@ public:
 	void DrawProjectilesTest(sf::RenderWindow & window, sf::Time & frameTime);
 	void SetEquipableMagic(Magic* newMagic);
 	Magic * GetEquipableMagic();
+	int GetManaPercentage();
+	void Update(sf::Time & frameTime);
+	float GetMana();
 };

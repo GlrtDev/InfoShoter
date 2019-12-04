@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include <math.h>
 
-
+float Enemy::m_levelMultipler = 1;
 std::vector<sf::Vector2f> Enemy::GetboundingBox()
 {
 	return m_boundingBox;
@@ -94,8 +94,9 @@ void Enemy::KillThis()
 
 void Enemy::InitializeEnemy()
 {
-	m_maxHealthPoints = m_baseHealth + m_level * m_healthLevelMultipler;
+	m_maxHealthPoints = m_baseHealth + m_level * m_healthLevelMultipler * Enemy::m_levelMultipler;
 	m_exp = m_baseExp + m_level * m_expMultipler;
+	Enemy::m_levelMultipler *= 1.1f;
 }
 
 int Enemy::GetExp()
@@ -107,3 +108,10 @@ int Enemy::GetLevel()
 {
 	return m_level;
 }
+
+//void Enemy::InitialLoad()
+//{
+//	Enemy::m_levelMultipler = 1;
+//}
+
+

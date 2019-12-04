@@ -6,7 +6,7 @@ class GameGui
 {
 private:
 	tgui::Label::Ptr m_waveText, m_waveCounter, m_playerMainGui, m_levelUpHelp, m_magicGui, m_magicIconBG, m_lootMagicGui;
-	tgui::ProgressBar::Ptr m_experienceBar, m_magicReloadFilm;
+	tgui::ProgressBar::Ptr m_experienceBar, m_magicReloadFilm, m_manaBar;
 	tgui::Picture::Ptr m_magicIcon;
 	Player* m_player;
 	const sf::Clock* m_timeBetweenWaves;

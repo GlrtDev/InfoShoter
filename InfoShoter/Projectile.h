@@ -11,7 +11,7 @@ class Projectile :
 	//const sf::Vector2f m_allOffset;
 	//const sf::Vector2f m_windOffset;
 public:
-	Projectile(int damage, int speed,int type);
+	Projectile(int damage, int speed,int type,sf::Color ProjectileColor);
 	~Projectile();
 	void Move(sf::Time &frameTime);
 	void SetDirection(const std::string FacingSide, sf::Vector2f startPosition);

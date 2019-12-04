@@ -18,6 +18,7 @@ protected:
 	int m_exp;
 	int m_baseExp;
 	int m_expMultipler;
+	static float m_levelMultipler;
 	//bool alive;
 public:
 	
@@ -36,5 +37,6 @@ public:
 	int GetExp();
 
 	int GetLevel();
+	//static void InitialLoad();
 };
 

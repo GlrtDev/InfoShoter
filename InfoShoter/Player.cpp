@@ -3,7 +3,8 @@
 
 //#define M_PI 3.14159265358979323846
 
-Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.f, -25.f), sf::Vector2f(-21.f, -25.f), sf::Vector2f(-35.f, -50.f), sf::Vector2f(-21.f, -50.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-35.f, 0.f) } }), Renderer(startPosition), m_expNeededToLevelUp(100)
+Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.f, -25.f), sf::Vector2f(-21.f, -25.f), sf::Vector2f(-35.f, -50.f), sf::Vector2f(-21.f, -50.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-35.f, 0.f) } }),
+Renderer(startPosition), m_expNeededToLevelUp(100), m_maxMana(10), m_swordDamageMultipler(1)
 {
 	m_speed = 2;
 	m_maxSpeed = sf::Vector2f(50.f * m_speed, 50.f * m_speed);
@@ -13,9 +14,11 @@ Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.
 	m_exp = 0;
 	m_skillpoints = 0;
 	m_magicPower = 0;
-	//m_currentMagic = new Magic(1,11243.f); // the second should be frame Time *1000
-	m_currentMagic = nullptr;
+	m_currentMagic = new Magic(1,11.f,1);
+	//m_currentMagic = nullptr;
 	m_equipableMagic = nullptr;
+	m_mana = m_maxMana;
+	
 }
 
 void Player::Move(sf::Time &frameTime)
@@ -188,7 +191,10 @@ void Player::Control()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
 	{
 		if (m_currentMagic != nullptr)
-		m_currentMagic->ShotProjectile(lastFacingSide, Renderer.GetPosition());
+			if (m_currentMagic->GetManaCost() <= m_mana)	
+				if(m_currentMagic->ShotProjectile(lastFacingSide, Renderer.GetPosition()))
+					m_mana -= m_currentMagic->GetManaCost();
+
 	}
 
 	if (m_equipableMagic != nullptr) {
@@ -209,7 +215,7 @@ void Player::Control()
 
 int Player::GetDamage()
 {
-	return m_swordDamage;
+	return m_swordDamage * m_swordDamageMultipler;
 }
 
 bool Player::IsAttacking()
@@ -233,6 +239,7 @@ void Player::LevelUp()
 {
 	m_level += 1;
 	++m_skillpoints;
+	++m_swordDamage;
 	m_exp = 0;
 
 }
@@ -255,8 +262,8 @@ int Player::GetSkillpoints()
 void Player::AssignSkillpoints()
 {
 	if (m_skillpoints > 0) {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) { m_swordDamage += 1; m_skillpoints--; }
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) { m_magicPower += 1; m_skillpoints--; }
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) { m_swordDamageMultipler += 0.5f; m_skillpoints--; }
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) { m_magicPower += 1; m_skillpoints--; m_currentMagic->LevelUp(); m_maxMana *= 2; }
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) { 
 			m_speed += 1; m_skillpoints--;
 			m_maxSpeed = sf::Vector2f(50.f * m_speed, 50.f * m_speed);
@@ -289,5 +296,21 @@ void Player::SetEquipableMagic(Magic * newMagic)
 Magic* Player::GetEquipableMagic()
 {
 	return m_equipableMagic;
+}
+
+int Player::GetManaPercentage()
+{
+	return 100 * (m_mana / m_maxMana);
+}
+
+void Player::Update(sf::Time & frameTime)
+{
+	if (m_mana < m_maxMana)
+		m_mana += frameTime.asSeconds()*(m_maxMana/(8.f - m_swordDamage* 0.1f));
+}
+
+float Player::GetMana()
+{
+	return m_mana;
 }
 

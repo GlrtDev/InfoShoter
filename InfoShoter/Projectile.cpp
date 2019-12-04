@@ -2,7 +2,7 @@
 
 
 
-Projectile::Projectile(int damage, int speed, int type) : m_damage(damage), m_speed(speed), m_type(type)
+Projectile::Projectile(int damage, int speed, int type, sf::Color ProjectileColor) : m_damage(damage), m_speed(speed), m_type(type)
 {
 	switch (type) {
 	case 0:
@@ -15,6 +15,7 @@ Projectile::Projectile(int damage, int speed, int type) : m_damage(damage), m_sp
 		m_animatedSprite.setAnimation(m_tornadoFly);
 		break;
 	}
+	m_animatedSprite.setColor(ProjectileColor);
 	m_readyToDie = false;
 }
 
