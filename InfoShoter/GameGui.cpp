@@ -10,7 +10,7 @@ std::string to_string_with_precision(const T a_value, const int n)
 	return out.str();
 }
 
-GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int* waveNumber)
+GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int* waveNumber, sf::Time* frameTime) : m_frameTime(frameTime), m_player(player), m_timeBetweenWaves(timeBetweenWaves), m_waveNumber(waveNumber)
 {
 	m_waveText = tgui::Label::create();
 	m_waveText->getRenderer()->setFont(tgui::Font::Font("../assets/IMMORTAL.ttf"));
@@ -53,6 +53,15 @@ GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int
 	m_magicIcon->setPosition(1220, 950);
 	m_magicIcon->setSize(75.f, 75.f);
 
+	m_magicReloadFilm = tgui::ProgressBar::create();
+	m_magicReloadFilm->setFillDirection(tgui::ProgressBar::FillDirection::TopToBottom);
+	m_magicReloadFilm->getRenderer()->setBackgroundColor(sf::Color(0, 0, 0, 0));
+	m_magicReloadFilm->getRenderer()->setFillColor(sf::Color(0, 0, 0, 255));
+	m_magicReloadFilm->getRenderer()->setOpacity(0.9f);
+	m_magicReloadFilm->setPosition(1220, 950);
+	m_magicReloadFilm->setSize(75.f, 75.f);
+	m_magicReloadFilm->setValue(0);
+
 	m_magicIconBG = tgui::Label::create();
 	m_magicIconBG->setPosition(1215, 950);
 	m_magicIconBG->getRenderer()->setBorders(3);
@@ -67,6 +76,7 @@ GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int
 	gui.add(m_magicGui);
 	gui.add(m_magicIconBG);
 	gui.add(m_magicIcon);
+	gui.add(m_magicReloadFilm);
 
 	m_levelUpHelp = tgui::Label::create();
 	m_levelUpHelp->getRenderer()->setFont(tgui::Font::Font("../assets/IMMORTAL.ttf"));
@@ -77,10 +87,6 @@ GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int
 	m_levelUpHelp->setPosition(1615, 560);
 	//m_levelUpHelp
 	gui.add(m_levelUpHelp);
-
-	m_player = player;
-	m_timeBetweenWaves = timeBetweenWaves;
-	m_waveNumber = waveNumber;
 }
 
 
@@ -112,6 +118,7 @@ void GameGui::Update()
 			" \n\t\t\t Damage: " + to_string_with_precision(magic->GetDamage() * (1 + m_player->GetMagicPower()/2.0),1) +
 			" \n\t\t\t Speed: " + to_string_with_precision(magic->GetSpeed() * (1 + m_player->GetMagicPower() / 2.0), 1) +
 			" \n\t\t\t Mana Cost: " + std::to_string(magic->GetManaCost()));
+		m_magicReloadFilm->setValue(magic->CalculateRecharge(*m_frameTime));
 	}
 	else {
 		m_magicGui->setVisible(false);

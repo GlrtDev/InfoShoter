@@ -2,6 +2,7 @@
 #include <iostream>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/System/Time.hpp>
 #include "AnimatedSprite.hpp"
 
@@ -20,6 +21,8 @@ protected:
 
 	AnimatedSprite m_animatedSprite;
 	Animation* m_currentAnimation;
+
+	sf::CircleShape collisionPoint;
 public:
 	ParticleRenderer();
 	~ParticleRenderer();

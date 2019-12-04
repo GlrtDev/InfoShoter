@@ -13,8 +13,8 @@ Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.
 	m_exp = 0;
 	m_skillpoints = 0;
 	m_magicPower = 0;
-	m_currentMagic = new Magic(1,11.f); // the second should be frame Time *1000
-	//m_currentMagic = nullptr;
+	//m_currentMagic = new Magic(1,11243.f); // the second should be frame Time *1000
+	m_currentMagic = nullptr;
 }
 
 void Player::Move(sf::Time &frameTime)

@@ -18,6 +18,7 @@ class Magic
 	float m_rechargeTime; // in sec
 	int m_type; // 0 fire , 1 ice , 2 wind
 	Projectile* projectile;
+	bool m_projectileLoaded;
 public:
 	Magic(int level, float seedAsFrameTimeSec);
 	~Magic();
@@ -30,5 +31,7 @@ public:
 	float GetRechargeTime();
 	int GetType();
 	sf::Texture GetIconTexture();
+	int CalculateRecharge(sf::Time & frameTime);
+	std::vector<Projectile>* GetProjectiles();
 };
 

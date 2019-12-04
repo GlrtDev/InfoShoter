@@ -34,7 +34,8 @@ ParticleRenderer::ParticleRenderer()
 
 	for (int i = 0; i < 60; i++)
 		m_tornadoFly.addFrame(sf::IntRect(96 * i, 0, 96, 96));
-
+	collisionPoint.setRadius(2.f);
+	collisionPoint.setFillColor(sf::Color::Black);
 }
 
 
@@ -44,7 +45,9 @@ ParticleRenderer::~ParticleRenderer()
 
 void ParticleRenderer::Draw(sf::RenderWindow & window, sf::Time & frameTime)
 {
+	collisionPoint.setPosition(m_animatedSprite.getPosition() + sf::Vector2f(48, 60));
 	m_animatedSprite.update(5.f * frameTime);
 	window.draw(m_animatedSprite);
+	window.draw(collisionPoint);
 }
 

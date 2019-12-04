@@ -2,7 +2,7 @@
 #include <random>
 
 
-Magic::Magic(int level, float seedAsFrameTimeSec)
+Magic::Magic(int level, float seedAsFrameTimeSec) : m_projectileLoaded(true)
 {
 	std::minstd_rand0 randomNumberGenerator;
 	std::uniform_int_distribution<int> randRange(50, 100);
@@ -12,10 +12,10 @@ Magic::Magic(int level, float seedAsFrameTimeSec)
 	m_damage = level * randRange(randomNumberGenerator);
 	m_speed = randRange(randomNumberGenerator);
 	m_manaCost = m_damage + m_speed;
-	m_rechargeTime = m_speed;
+	m_rechargeTime = 7 - (m_speed/25 + m_manaCost/(50*level));
 	m_type = randRange(randomNumberGenerator) % 3; // change to %3 later
 	projectile = new Projectile(m_damage, m_speed, m_type);
-
+	
 	switch (m_type) {
 	case 0:
 		m_iconTexture.loadFromFile("../Sprites/Icons/Fire.png", { 0, 0, 16, 16 });
@@ -39,8 +39,11 @@ Magic::~Magic()
 
 void Magic::ShotProjectile(const std::string lastFacingSide, sf::Vector2f startPosition)
 {
-	projectile->SetDirection(lastFacingSide, startPosition);
-	m_projectiles.push_back(*projectile);
+	if (m_projectileLoaded) {
+		projectile->SetDirection(lastFacingSide, startPosition);
+		m_projectiles.push_back(*projectile);
+		m_projectileLoaded = false;
+	}
 }
 
 void Magic::DrawProjectiles(sf::RenderWindow & window, sf::Time & frameTime)
@@ -96,5 +99,24 @@ int Magic::GetType()
 sf::Texture Magic::GetIconTexture()
 {
 	return m_iconTexture;
+}
+
+int Magic::CalculateRecharge(sf::Time & frameTime)
+{
+	static sf::Time timeRecharging;
+
+	if (!m_projectileLoaded)
+		timeRecharging += frameTime;
+
+	if (timeRecharging.asSeconds() >= m_rechargeTime) {
+		timeRecharging = sf::Time::Zero;
+		m_projectileLoaded = true;
+	}
+	return (timeRecharging == sf::Time::Zero) ? 0 : 100 - ((timeRecharging.asSeconds() / m_rechargeTime ) * 100);
+}
+
+std::vector<Projectile>* Magic::GetProjectiles()
+{
+	return &m_projectiles;
 }
 

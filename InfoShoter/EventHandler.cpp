@@ -4,7 +4,7 @@ void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisio
 {
 	static sf::Time damagePeriod; 
 	damagePeriod += frameTime;
-
+	//player wall collision
 	for (auto& object : collisionLayer.getObjects())
 	{
 		for (auto& point : player.m_boundingBox)
@@ -17,6 +17,7 @@ void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisio
 			}
 		}
 	}
+	//player enemy sword collision
 	if(player.IsAttacking())
 	for (auto enemy = enemiesLiving.begin(); enemy != enemiesLiving.end(); ++enemy) {
 		
@@ -46,6 +47,27 @@ void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisio
 		}
 	}
 
+	if (player.GetCurrentMagic() != nullptr) {
+		std::vector<Projectile>* projectiles = player.GetCurrentMagic()->GetProjectiles();
+
+		if (!(projectiles->empty())) {
+			for (auto enemy = enemiesLiving.begin(); enemy != enemiesLiving.end(); ++enemy) {
+				bool collisionFinished = false;
+				for (auto projectile = projectiles->begin(); projectile != projectiles->end(); ++projectile) {
+					if (EventHandler::contains<sf::Vector2f>(projectile->GetCollisionPoint(), enemy->GetboundingBox(), enemy->getPosition())) {
+						if (enemy->ReceiveDamage(projectile->GetDamage())) {
+							player.GainExp(enemy->GetExp());
+							enemiesLiving.erase(enemy);
+						}
+						projectiles->erase(projectile);
+						collisionFinished = true;
+						break;
+					}
+				}
+				if (collisionFinished) break;
+			}
+		}
+	}
 }
 
 std::queue<sf::Vector2f> EventHandler::initializePaths(std::queue<sf::Vector2f>* paths)

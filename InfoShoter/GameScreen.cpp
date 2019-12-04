@@ -84,7 +84,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 	std::default_random_engine randomNumberGenerator;
 	std::uniform_int_distribution<int> randRange(1, 100);
 	
-	GameGui gameGui(gui, &player, &timeBetwenWaves,&waveNumber);
+	GameGui gameGui(gui, &player, &timeBetwenWaves,&waveNumber,&frameTime);
 	
 	while (Running)
 	{
