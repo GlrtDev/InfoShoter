@@ -15,6 +15,7 @@ Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.
 	m_magicPower = 0;
 	//m_currentMagic = new Magic(1,11243.f); // the second should be frame Time *1000
 	m_currentMagic = nullptr;
+	m_equipableMagic = nullptr;
 }
 
 void Player::Move(sf::Time &frameTime)
@@ -189,6 +190,18 @@ void Player::Control()
 		if (m_currentMagic != nullptr)
 		m_currentMagic->ShotProjectile(lastFacingSide, Renderer.GetPosition());
 	}
+
+	if (m_equipableMagic != nullptr) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+		{
+			m_currentMagic = m_equipableMagic;
+			m_equipableMagic = nullptr;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+		{
+			m_equipableMagic = nullptr;
+		}
+	}
 	//TO DO make this look good
 	Renderer.PlayAnimation();
 	AssignSkillpoints();
@@ -268,4 +281,13 @@ void Player::DrawProjectilesTest(sf::RenderWindow & window, sf::Time & frameTime
 	m_currentMagic->DrawProjectiles(window, frameTime);
 }
 
+void Player::SetEquipableMagic(Magic * newMagic)
+{
+	m_equipableMagic = newMagic;
+}
+
+Magic* Player::GetEquipableMagic()
+{
+	return m_equipableMagic;
+}
 

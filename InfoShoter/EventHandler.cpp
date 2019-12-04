@@ -1,9 +1,15 @@
 #include "EventHandler.h"
+#include <random>
+
+std::default_random_engine generator;
+std::uniform_int_distribution<int> distribution(0, 10);
+auto randomNumber = std::bind(distribution, generator);
 
 void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisionLayer, sf::Time frameTime, std::vector<Enemy> &enemiesLiving)
 {
 	static sf::Time damagePeriod; 
 	damagePeriod += frameTime;
+
 	//player wall collision
 	for (auto& object : collisionLayer.getObjects())
 	{
@@ -17,7 +23,8 @@ void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisio
 			}
 		}
 	}
-	//player enemy sword collision
+
+	//playersword enemy collision
 	if(player.IsAttacking())
 	for (auto enemy = enemiesLiving.begin(); enemy != enemiesLiving.end(); ++enemy) {
 		
@@ -30,6 +37,10 @@ void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisio
 				damagePeriod = sf::Time::Zero;
 				if (enemy->ReceiveDamage(player.GetDamage())) {
 					//int index = std::distance(enemiesLiving.begin(), enemy);
+					if (randomNumber() <= 9) {
+						Magic* lootMagic = new Magic(enemy->GetLevel(), frameTime.asMicroseconds()* 100);
+						player.SetEquipableMagic(lootMagic);
+					}
 					player.GainExp(enemy->GetExp());
 					enemiesLiving.erase(enemy);
 					//enemiesLiving.shrink_to_fit();
@@ -46,7 +57,7 @@ void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisio
 			break;
 		}
 	}
-
+	//enemy magic collision
 	if (player.GetCurrentMagic() != nullptr) {
 		std::vector<Projectile>* projectiles = player.GetCurrentMagic()->GetProjectiles();
 

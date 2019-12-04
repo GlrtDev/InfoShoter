@@ -1,19 +1,22 @@
 #include "Magic.h"
 #include <random>
 
+const std::string magicNames[20]{ "Dying Light", "Scarlet","Dreamwatcher","Engraved Pole","Oblivion","Clemency","Stalk of Truth","Tormented Pole","Crazed Grand Staff","Fireweaver","Nirvana","Pursuit","Peacekeeper's Scepter","Vengeance Branch","Quicksilver","Twister","Dreambinder","Heartless Spire","Mage's Greatstaff" };
 
 Magic::Magic(int level, float seedAsFrameTimeSec) : m_projectileLoaded(true)
 {
 	std::minstd_rand0 randomNumberGenerator;
 	std::uniform_int_distribution<int> randRange(50, 100);
+	std::uniform_int_distribution<int> nameRange(0, 19);
 	//randRange(randomNumberGenerator);
-	m_name = "magic";
 	randomNumberGenerator.seed(seedAsFrameTimeSec);
+	m_name = magicNames[nameRange(randomNumberGenerator)];
 	m_damage = level * randRange(randomNumberGenerator);
 	m_speed = randRange(randomNumberGenerator);
 	m_manaCost = m_damage + m_speed;
 	m_rechargeTime = 7 - (m_speed/25 + m_manaCost/(50*level));
-	m_type = randRange(randomNumberGenerator) % 3; // change to %3 later
+	std::uniform_int_distribution<int> randRangeForType(0, 2);
+	m_type = randRangeForType(randomNumberGenerator);// change to %3 later
 	projectile = new Projectile(m_damage, m_speed, m_type);
 	
 	switch (m_type) {

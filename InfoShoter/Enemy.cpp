@@ -102,3 +102,8 @@ int Enemy::GetExp()
 {
 	return m_exp;
 }
+
+int Enemy::GetLevel()
+{
+	return m_level;
+}

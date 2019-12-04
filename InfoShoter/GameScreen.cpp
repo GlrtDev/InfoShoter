@@ -128,10 +128,11 @@ int GameScreen::Run(sf::RenderWindow & window)
 			
 		}
 		else if (timeBetwenWaves.getElapsedTime().asSeconds() < 5 && !waveStarted && !wavePrepared) { // wave havent started , mobs preparing
+			++waveNumber;
 			int enemyUnitsPower = enemyUnitsPowerBase + waveNumber * enemyUnitsPowerMultipler;
 			int enemyType;
 			Bat* bat = new Bat(path[0], waveNumber);
-			Knight* knight = new Knight(path[0], waveNumber);
+			Knight* knight = new Knight(path[0], waveNumber); 
 			while (enemyUnitsPower > 0) {
 				enemyType = randRange(randomNumberGenerator) + waveNumber;
 				if (enemyType <= 60) {
@@ -144,7 +145,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 				}
 			}
 			wavePrepared = true;
-			++waveNumber;
+			
 		}
 
 			if (spawnPeriod.getElapsedTime().asSeconds() > 1.5f && !enemySpawnQueue.empty() && waveStarted) {

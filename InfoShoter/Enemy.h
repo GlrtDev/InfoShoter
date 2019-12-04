@@ -34,5 +34,7 @@ public:
 
 	void InitializeEnemy();
 	int GetExp();
+
+	int GetLevel();
 };
 

@@ -15,6 +15,7 @@ private:
 	sf::Vector2f m_maxSpeed, m_maxSpeedInv;
 	//std::vector<Magic> m_magics;
 	Magic* m_currentMagic;
+	Magic* m_equipableMagic;
 	int m_level;
 	int m_swordDamage;
 	bool m_isAttacking;
@@ -47,4 +48,6 @@ public:
 	int GetMagicPower();
 	Magic* GetCurrentMagic();
 	void DrawProjectilesTest(sf::RenderWindow & window, sf::Time & frameTime);
+	void SetEquipableMagic(Magic* newMagic);
+	Magic * GetEquipableMagic();
 };

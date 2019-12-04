@@ -22,7 +22,7 @@ protected:
 	AnimatedSprite m_animatedSprite;
 	Animation* m_currentAnimation;
 
-	sf::CircleShape collisionPoint;
+	//sf::CircleShape collisionPoint;
 public:
 	ParticleRenderer();
 	~ParticleRenderer();
