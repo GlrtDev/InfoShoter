@@ -14,12 +14,15 @@ private:
 	tgui::ListBox::Ptr listBox;
 	tgui::Button::Ptr nextButton;
 	tgui::Button::Ptr startButton;
+	tgui::Button::Ptr helpButton;
+	tgui::Button::Ptr helpCloseButton;
+	tgui::Label::Ptr helpText;
 public:
 	void SignalHandler(tgui::Widget::Ptr widget, const std::string& signalName, const sf::String& buttonText);
 
 	//void NextHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, tgui::Button::Ptr nextBtt, tgui::Button::Ptr stBtt);
 
-	void LoadMenuGUI(tgui::Gui &gui);
+	//void LoadMenuGUI(tgui::Gui &gui);
 
 	void HideMenuGUI(tgui::Gui &gui);
 
