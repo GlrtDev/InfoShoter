@@ -6,7 +6,7 @@
 Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.f, -25.f), sf::Vector2f(-21.f, -25.f), sf::Vector2f(-35.f, -50.f), sf::Vector2f(-21.f, -50.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-35.f, 0.f) } }),
 Renderer(startPosition), m_expNeededToLevelUp(80), m_maxMana(10), m_swordDamageMultipler(1)
 {
-	m_speed = 2;
+	m_speed = 5;
 	m_maxSpeed = sf::Vector2f(50.f * m_speed, 50.f * m_speed);
 	m_maxSpeedInv = sf::Vector2f(-50.f * m_speed, -50.f * m_speed);
 	m_swordDamage = 5;

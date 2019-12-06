@@ -6,9 +6,7 @@
 class GameScreen : public cScreen
 {
 private:
-	int alpha_max;
-	int alpha_div;
-	bool playing;
+	bool m_playing;
 public:
 	GameScreen(void);
 	virtual int Run(sf::RenderWindow &App);

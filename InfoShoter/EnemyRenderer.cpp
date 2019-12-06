@@ -4,6 +4,7 @@
 
 EnemyRenderer::EnemyRenderer()
 {
+	m_animationSpeed = 1;
 	m_healthBar.setSize(sf::Vector2f(25.f, 4.f));
 	m_healthBar.setFillColor(sf::Color(0, 255, 0, 170));
 	m_healthBarBackground.setSize(sf::Vector2f(25.f, 4.f));
@@ -26,11 +27,12 @@ EnemyRenderer::~EnemyRenderer()
 
 void EnemyRenderer::Draw(sf::RenderWindow &window, sf::Time &frameTime)
 {
+	sf::Time frameTime_t = m_animationSpeed * frameTime;
 	//if (!dead) {
 	try {
 		m_animatedSprite.play(*m_currentAnimation);
 		if(m_currentAnimation == &m_walkingAnimationLeft || m_currentAnimation == &m_walkingAnimationRight)
-		m_animatedSprite.update(frameTime); //sometimes throw exception: vector subscript out of range
+		m_animatedSprite.update(frameTime_t); //sometimes throw exception: vector subscript out of range
 		window.draw(m_animatedSprite);
 		window.draw(m_healthBarBackground);
 		window.draw(m_healthBar);

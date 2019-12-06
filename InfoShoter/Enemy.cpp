@@ -21,6 +21,7 @@ bool Enemy::Move(sf::Vector2f targetPosition, sf::Time &frameTime) {
 	
 	bool targetReached = false;
 	sf::Vector2f delta,movement;
+	targetPosition += m_positionOffset;
 	delta.x = targetPosition.x - m_animatedSprite.getPosition().x;
 	delta.y = targetPosition.y - m_animatedSprite.getPosition().y;
 	int side = (delta.x > 0) ? 1 : ( (delta.x < 0 ) ? -1 : 0 );
@@ -53,7 +54,7 @@ bool Enemy::Move(sf::Vector2f targetPosition, sf::Time &frameTime) {
 	return targetReached;
 }
 
-void Enemy::FollowPath(sf::Time &frameTime)
+void Enemy::FollowPath(sf::Time &frameTime,bool &endOfGame)
 {
 	if (!m_path.empty()) {
 		if (Move(m_path.front(), frameTime)) {
@@ -63,7 +64,7 @@ void Enemy::FollowPath(sf::Time &frameTime)
 		
 	}
 	else {
-		//std::cout << "nie" << std::endl;
+		endOfGame = false;
 	}
 }
 

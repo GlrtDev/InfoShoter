@@ -21,11 +21,12 @@ protected:
 
 	sf::CircleShape m_boundingBoxDots[4];
 
+	float m_animationSpeed;
 	//bool dead;
 public:
 	EnemyRenderer();
 	~EnemyRenderer();
-	void Draw(sf::RenderWindow &window, sf::Time &frameTime);
+	virtual void Draw(sf::RenderWindow &window, sf::Time &frameTime);
 	void DrawOnMinimap(sf::RenderWindow &window);
 	sf::Vector2f GetPosition();
 	void ChangeAnimation(int i);

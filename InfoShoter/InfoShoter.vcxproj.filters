@@ -72,6 +72,18 @@
     <ClCompile Include="EventHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BlobMinion.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BlobSlime.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Goblin.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Roque.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -132,6 +144,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Projectile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BlobMinion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BlobSlime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Roque.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Goblin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

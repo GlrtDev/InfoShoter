@@ -19,6 +19,7 @@ protected:
 	int m_baseExp;
 	int m_expMultipler;
 	static float m_levelMultipler;
+	sf::Vector2f m_positionOffset;
 	//bool alive;
 public:
 	
@@ -26,7 +27,7 @@ public:
 	~Enemy();
 
 	bool Move(sf::Vector2f targetPosition, sf::Time &frameTime);
-	void FollowPath(sf::Time &frameTime);
+	void FollowPath(sf::Time &frameTime, bool &endOfGame);
 	sf::Vector2f getPosition();
 	std::vector<sf::Vector2f> GetboundingBox();
 

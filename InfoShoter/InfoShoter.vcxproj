@@ -128,12 +128,15 @@
     <ClCompile Include="AnimatedSprite.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Bat.cpp" />
+    <ClCompile Include="BlobMinion.cpp" />
+    <ClCompile Include="BlobSlime.cpp" />
     <ClCompile Include="cScreen.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyRenderer.cpp" />
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="GameGui.cpp" />
     <ClCompile Include="GameScreen.cpp" />
+    <ClCompile Include="Goblin.cpp" />
     <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Magic.cpp" />
     <ClCompile Include="main.cpp" />
@@ -143,6 +146,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerRenderer.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="Roque.cpp" />
     <ClCompile Include="sprawozdanie.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
@@ -152,6 +156,8 @@
     <ClInclude Include="Bat.h" />
     <ClInclude Include="AnimatedSprite.hpp" />
     <ClInclude Include="Animation.hpp" />
+    <ClInclude Include="BlobMinion.h" />
+    <ClInclude Include="BlobSlime.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="cScreen.h" />
     <ClInclude Include="Enemy.h" />
@@ -159,6 +165,7 @@
     <ClInclude Include="EventHandler.h" />
     <ClInclude Include="GameGui.h" />
     <ClInclude Include="GameScreen.h" />
+    <ClInclude Include="Goblin.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Magic.h" />
     <ClInclude Include="Menu.h" />
@@ -167,6 +174,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerRenderer.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="Roque.h" />
     <ClInclude Include="Screens.h" />
     <ClInclude Include="SFMLOrthogonalLayer.hpp" />
   </ItemGroup>

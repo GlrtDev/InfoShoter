@@ -15,14 +15,13 @@
 #include "GameGui.h"
 #include "Bat.h"
 #include "Knight.h"
+#include "Roque.h"
+#include "BlobMinion.h"
+#include "BlobSlime.h"
+#include "Goblin.h"
 #include "EventHandler.h"
 #include <vector>
-GameScreen::GameScreen(void)
-{
-	alpha_max = 3 * 255;
-	alpha_div = 3;
-	playing = false;
-}
+GameScreen::GameScreen(void) : m_playing(true) {};
 
 int GameScreen::Run(sf::RenderWindow & window)
 {
@@ -90,73 +89,94 @@ int GameScreen::Run(sf::RenderWindow & window)
 	
 	while (Running)
 	{
-		view.setCenter(player.Renderer.GetPosition()+ cameraCorrection);
-		miniMap.setCenter(player.Renderer.GetPosition());
-		frameTime = frameClock.restart();
-		//Verifying events
-		while (window.pollEvent(Event))
-		{
-			// Window closed
-			if (Event.type == sf::Event::Closed)
+		if (m_playing) {
+			view.setCenter(player.Renderer.GetPosition() + cameraCorrection);
+			miniMap.setCenter(player.Renderer.GetPosition());
+			frameTime = frameClock.restart();
+			//Verifying events
+			while (window.pollEvent(Event))
 			{
-				return (-1);
-			}
-
-			if (Event.type == sf::Event::KeyReleased)
-			{
-				if (Event.key.code == sf::Keyboard::W || Event.key.code == sf::Keyboard::S) 
+				// Window closed
+				if (Event.type == sf::Event::Closed)
 				{
-					player.Resetm_velocityY();
+					return (-1);
 				}
-				if (Event.key.code == sf::Keyboard::A || Event.key.code == sf::Keyboard::D) 
+
+				if (Event.type == sf::Event::KeyReleased)
 				{
-					player.Resetm_velocityX();
+					if (Event.key.code == sf::Keyboard::W || Event.key.code == sf::Keyboard::S)
+					{
+						player.Resetm_velocityY();
+					}
+					if (Event.key.code == sf::Keyboard::A || Event.key.code == sf::Keyboard::D)
+					{
+						player.Resetm_velocityX();
+					}
 				}
+				gui.handleEvent(Event);
 			}
-			gui.handleEvent(Event);
-		}
 
-		//std::cout << std::endl << player.Renderer.GetPosition().x<<" " << player.Renderer.GetPosition().y;
-		player.Control();
-		player.Move(frameTime);
-		player.Update(frameTime);
-		gameGui.Update();
-		
+			//std::cout << std::endl << player.Renderer.GetPosition().x<<" " << player.Renderer.GetPosition().y;
+			player.Control();
+			player.Move(frameTime);
+			player.Update(frameTime);
 
-		if (timeBetwenWaves.getElapsedTime().asSeconds() > 5 && !waveStarted) { // wave is starting
-			waveStarted = true;
-			gameGui.HideCounter();
-			timeBetwenWaves.restart();
-			
-		}
-		else if (timeBetwenWaves.getElapsedTime().asSeconds() < 5 && !waveStarted && !wavePrepared) { // wave havent started , mobs preparing
-			++waveNumber;
-			int enemyUnitsPower = enemyUnitsPowerBase + waveNumber * enemyUnitsPowerMultipler;
-			int enemyType;
-			int pathNumber = (waveNumber / 10) % 3;
-			Bat* bat = new Bat(path[pathNumber], waveNumber);
-			Knight* knight = new Knight(path[pathNumber], waveNumber);
-			while (enemyUnitsPower > 0) {
-				enemyType = randRange(randomNumberGenerator) + waveNumber;
-				if (enemyType <= 60) {
-					enemySpawnQueue.push_back(*bat);
-					enemyUnitsPower -= 100 + waveNumber * 10;
-				}
-				else if (enemyType > 60) {
-					enemySpawnQueue.push_back(*knight);
-					enemyUnitsPower -= 100 + waveNumber * 10;
-				}
+
+
+			if (timeBetwenWaves.getElapsedTime().asSeconds() > 5 && !waveStarted) { // wave is starting
+				waveStarted = true;
+				gameGui.HideCounter();
+				timeBetwenWaves.restart();
+
 			}
-			wavePrepared = true;
-			
-		}
+			else if (timeBetwenWaves.getElapsedTime().asSeconds() < 5 && !waveStarted && !wavePrepared) { // wave havent started , mobs preparing
+				++waveNumber;
+				int enemyUnitsPower = enemyUnitsPowerBase + waveNumber * enemyUnitsPowerMultipler;
+				int enemyType;
+				int pathNumber = (waveNumber / 10) % 3;
+				Bat* bat = new Bat(path[pathNumber], waveNumber);
+				Knight* knight = new Knight(path[pathNumber], waveNumber);
+				Goblin* goblin = new Goblin(path[pathNumber], waveNumber);
+				Roque* roque = new Roque(path[pathNumber], waveNumber);
+				BlobMinion* blobMinion = new BlobMinion(path[pathNumber], waveNumber);
+				Enemy* blobSlime = new BlobSlime(path[pathNumber], waveNumber);
+				while (enemyUnitsPower > 0) {
+					enemyType = randRange(randomNumberGenerator) + 5 * waveNumber;
+					if (enemyType <= 50) {
+						enemySpawnQueue.push_back(*bat); // bat
+						enemyUnitsPower -= 100 + waveNumber * 10;
+					}
+					else if (enemyType > 50 && enemyType <= 100) {
+						enemySpawnQueue.push_back(*knight);
+						enemyUnitsPower -= 100 + waveNumber * 10;
+					}
+					else if (enemyType > 100 && enemyType <= 150) {
+						enemySpawnQueue.push_back(*goblin);
+						enemyUnitsPower -= 100 + waveNumber * 10;
+					}
+					else if (enemyType > 150 && enemyType <= 200) {
+						enemySpawnQueue.push_back(*roque);
+						enemyUnitsPower -= 100 + waveNumber * 10;
+					}
+					else if (enemyType > 200 && enemyType <= 250) {
+						enemySpawnQueue.push_back(*blobSlime);
+						enemyUnitsPower -= 100 + waveNumber * 10;
+					}
+					else if (enemyType > 250 && enemyType <= 300) {
+						enemySpawnQueue.push_back(*blobMinion);
+						enemyUnitsPower -= 100 + waveNumber * 10;
+					}
+				}
+				wavePrepared = true;
+
+			}
 
 			if (spawnPeriod.getElapsedTime().asSeconds() > 1.5f && !enemySpawnQueue.empty() && waveStarted) {
 				enemiesLiving.push_back(enemySpawnQueue.back());
 				enemySpawnQueue.pop_back();
 				spawnPeriod.restart();
 			}
-		
+
 			if (enemiesLiving.size() == 0 && waveStarted) {
 				waveStarted = false;
 				wavePrepared = false;
@@ -164,20 +184,24 @@ int GameScreen::Run(sf::RenderWindow & window)
 			}
 
 			for (auto& liveEnemy : enemiesLiving) {
-				liveEnemy.FollowPath(frameTime);
+				liveEnemy.FollowPath(frameTime, m_playing);
 			}
 			//std::cout << waveStarted;
 
-			
-
-		sf::Time duration = globalClock.getElapsedTime();
-		animatedLayer.update(duration);
-
-		//COLISION DETECTION START
-		EventHandler::CollisionDetection(player, collisionLayer, frameTime, enemiesLiving); //walls collisions
-		//COLLISION DETECT END
 
 
+			sf::Time duration = globalClock.getElapsedTime();
+			animatedLayer.update(duration);
+
+			//COLISION DETECTION START
+			EventHandler::CollisionDetection(player, collisionLayer, frameTime, enemiesLiving); //walls collisions
+			//COLLISION DETECT END
+		}
+		else {
+
+		}
+
+		gameGui.Update();
 		window.clear(sf::Color::Black);
 
 		window.setView(view);
@@ -189,7 +213,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 		window.draw(upperGroundLayer);
 
 		for (auto& en : enemiesLiving)
-			en.Draw(window, frameTime);
+			en.Draw(window,frameTime); // TODO can pass frame time once
 		//window.draw(animatedLayer);
 		
 		
