@@ -159,7 +159,6 @@
     <ClInclude Include="EventHandler.h" />
     <ClInclude Include="GameGui.h" />
     <ClInclude Include="GameScreen.h" />
-    <ClInclude Include="IngameGUI.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Magic.h" />
     <ClInclude Include="Menu.h" />

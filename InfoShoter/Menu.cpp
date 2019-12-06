@@ -19,12 +19,12 @@ void Menu::SignalHandler(tgui::Widget::Ptr widget, const std::string& signalName
 	else if (buttonText.toAnsiString() == "Start")
 		cScreen::goNext = true;
 	else if (buttonText.toAnsiString() == "Help") {
-		helpText->setVisible(true);
-		helpCloseButton->setVisible(true);
+		helpText->showWithEffect(tgui::ShowAnimationType::SlideFromBottom, sf::milliseconds(500));
+		helpCloseButton->showWithEffect(tgui::ShowAnimationType::SlideFromBottom, sf::milliseconds(500));
 	}
 	else if (buttonText.toAnsiString() == "X") {
-		helpText->setVisible(false);
-		helpCloseButton->setVisible(false);
+		helpText->hideWithEffect(tgui::ShowAnimationType::SlideToBottom, sf::milliseconds(500));
+		helpCloseButton->hideWithEffect(tgui::ShowAnimationType::SlideToBottom, sf::milliseconds(500));
 	}
 }
 
@@ -57,7 +57,7 @@ Menu::Menu(tgui::Gui &gui)
 	titleLabel->setPosition({ "32%", "16.67%" });
 	titleLabel->getRenderer()->setFont(tgui::Font::Font("../assets/KarmaFuture.ttf"));
 	titleLabel->setText("InfoShoter");
-	titleLabel->setTextSize(100);
+	titleLabel->setTextSize(115);
 	titleLabel->getRenderer()->setTextColor(sf::Color(216, 123, 29, 255));
 	//titleLabel->setAutoSize(true);
 	gui.add(titleLabel);
@@ -67,7 +67,7 @@ Menu::Menu(tgui::Gui &gui)
 	editBoxUsername = tgui::EditBox::create();
 	editBoxUsername->setSize({ "25%", "12.5%" });
 	editBoxUsername->setPosition({ "37.5%", "55%" });
-	editBoxUsername->setDefaultText("\t\t\t   Username");
+	editBoxUsername->setDefaultText("\t\t\tPlayer name");
 	editBoxUsername->setTextSize(38);
 	editBoxUsername->getRenderer()->setFont(tgui::Font::Font("../assets/KarmaFuture.ttf"));
 	gui.add(editBoxUsername);
@@ -84,6 +84,10 @@ Menu::Menu(tgui::Gui &gui)
 	listBox->addItem("\t\t\t Normal");
 	listBox->addItem("\t\t\t   Hard");
 	listBox->getRenderer()->setFont(tgui::Font::Font("../assets/KarmaFuture.ttf"));
+	listBox->getRenderer()->setSelectedBackgroundColor(sf::Color(216, 123, 29, 255));
+	listBox->getRenderer()->setBackgroundColorHover(sf::Color::Black);
+	listBox->getRenderer()->setTextColorHover(sf::Color::White);
+	listBox->getRenderer()->setSelectedBackgroundColorHover(sf::Color(150, 70, 0, 255));
 	listBox->setTextSize(38);
 	listBox->setItemHeight(45);
 	gui.add(listBox);
@@ -120,7 +124,14 @@ Menu::Menu(tgui::Gui &gui)
 	helpText->setPosition({ "5%" , "5%" });
 	helpText->setSize({ "90%" , "90%" });
 	helpText->getRenderer()->setBackgroundColor(sf::Color(20, 20, 20, 230));
+	helpText->getRenderer()->setBorders(8);
+	helpText->getRenderer()->setTextOutlineThickness(2);
+	helpText->getRenderer()->setTextColor(sf::Color(216, 123, 29, 255));
 	helpText->getRenderer()->setFont(tgui::Font::Font("../assets/KarmaFuture.ttf"));
+	helpText->setText("\n\n\n\n\t\t\t MOVE\t\t\t\t ATTACK\n\t\t[W] up\t\t\t\t[I] sword attack\n\t\t[S] down\t\t   [O] shot magic projectile\n\t\t[A] left\n\t\t[D] right"
+		"\n\n\nYou have to defend your flower. Enemies can't hurt you. Kill them before they go to the flower.\n\n\t\t\t\tSometimes they drop some magic. Click [E] to equip that magic or [Q] to dismiss.\n\n"
+	"When you kill enemy you got experience. After getting a certain number of Experience you can \t\t\t\t\t\t\tlevel up. Click [1] [2] or [3] to increase one of your attributes");
+	helpText->setTextSize(35);
 	helpText->setVisible(false);
 	gui.add(helpText);
 

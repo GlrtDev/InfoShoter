@@ -134,4 +134,5 @@ void PlayerRenderer::SetPosition(sf::Vector2f position_)
 void PlayerRenderer::Move(sf::Vector2f movement, sf::Time &frameTime)
 {
 	m_animatedSprite.move(movement * frameTime.asSeconds());
+	//std::cout << "x: " << m_animatedSprite.getPosition().x << "y: " << m_animatedSprite.getPosition().y << std::endl;
 }

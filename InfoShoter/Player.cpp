@@ -4,7 +4,7 @@
 //#define M_PI 3.14159265358979323846
 
 Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.f, -25.f), sf::Vector2f(-21.f, -25.f), sf::Vector2f(-35.f, -50.f), sf::Vector2f(-21.f, -50.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-35.f, 0.f) } }),
-Renderer(startPosition), m_expNeededToLevelUp(100), m_maxMana(10), m_swordDamageMultipler(1)
+Renderer(startPosition), m_expNeededToLevelUp(80), m_maxMana(10), m_swordDamageMultipler(1)
 {
 	m_speed = 2;
 	m_maxSpeed = sf::Vector2f(50.f * m_speed, 50.f * m_speed);
@@ -239,9 +239,8 @@ void Player::LevelUp()
 {
 	m_level += 1;
 	++m_skillpoints;
-	++m_swordDamage;
+	m_swordDamage += m_level/2;
 	m_exp = 0;
-
 }
 
 int Player::GetExpPercentage()

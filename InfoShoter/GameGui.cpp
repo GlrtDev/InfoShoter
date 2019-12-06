@@ -20,8 +20,9 @@ GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int
 	m_waveText->setTextSize(28);
 
 	m_waveCounter = tgui::Label::create();
-	m_waveCounter->getRenderer()->setFont(tgui::Font::Font("../assets/IMMORTAL.ttf"));
+	m_waveCounter->getRenderer()->setFont(tgui::Font::Font("../assets/KarmaFuture.ttf"));
 	m_waveCounter->getRenderer()->setTextColor(tgui::Color::Red);
+	m_waveCounter->getRenderer()->setTextOutlineThickness(1);
 	m_waveCounter->getRenderer()->setTextOutlineColor(tgui::Color::Black);
 	m_waveCounter->setPosition(720, 450);
 	m_waveCounter->setTextSize(68);
@@ -114,7 +115,7 @@ GameGui::~GameGui()
 void GameGui::Update()
 {
 	m_waveText->setText("wave:" + std::to_string(*m_waveNumber));
-	m_waveCounter->setText("Wave start in:\n\n\t  " + std::to_string((int)(5 - m_timeBetweenWaves->getElapsedTime().asSeconds())));
+	m_waveCounter->setText("Wave start in\n\n\t\t\t" + std::to_string((int)(5 - m_timeBetweenWaves->getElapsedTime().asSeconds())));
 
 	m_experienceBar->setValue(m_player->GetExpPercentage());
 	

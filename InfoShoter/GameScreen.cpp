@@ -45,6 +45,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 	MapLayer groundLayer(map, 0);
 	MapLayer upperGroundLayer(map, 1);
 	MapLayer decorativeLayer(map, 2);
+	MapLayer animatedLayer(map, 3);
 	tmx::ObjectGroup collisionLayer;
 	/*tmx::ObjectGroup collisionLayer;*/
 	int i = 1;
@@ -132,8 +133,9 @@ int GameScreen::Run(sf::RenderWindow & window)
 			++waveNumber;
 			int enemyUnitsPower = enemyUnitsPowerBase + waveNumber * enemyUnitsPowerMultipler;
 			int enemyType;
-			Bat* bat = new Bat(path[0], waveNumber);
-			Knight* knight = new Knight(path[0], waveNumber); 
+			int pathNumber = (waveNumber / 10) % 3;
+			Bat* bat = new Bat(path[pathNumber], waveNumber);
+			Knight* knight = new Knight(path[pathNumber], waveNumber);
 			while (enemyUnitsPower > 0) {
 				enemyType = randRange(randomNumberGenerator) + waveNumber;
 				if (enemyType <= 60) {
@@ -169,7 +171,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 			
 
 		sf::Time duration = globalClock.getElapsedTime();
-		decorativeLayer.update(duration);
+		animatedLayer.update(duration);
 
 		//COLISION DETECTION START
 		EventHandler::CollisionDetection(player, collisionLayer, frameTime, enemiesLiving); //walls collisions
@@ -180,6 +182,7 @@ int GameScreen::Run(sf::RenderWindow & window)
 
 		window.setView(view);
 		window.draw(groundLayer);
+		window.draw(decorativeLayer);
 		player.DrawProjectilesTest(window, frameTime);
 		player.Renderer.Draw(window, frameTime);
 		
@@ -187,8 +190,8 @@ int GameScreen::Run(sf::RenderWindow & window)
 
 		for (auto& en : enemiesLiving)
 			en.Draw(window, frameTime);
-
-		window.draw(decorativeLayer);
+		//window.draw(animatedLayer);
+		
 		
 
 		window.setView(miniMap);
