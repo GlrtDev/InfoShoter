@@ -19,7 +19,8 @@ private:
 	tgui::Label::Ptr helpText;
 public:
 	void SignalHandler(tgui::Widget::Ptr widget, const std::string& signalName, const sf::String& buttonText);
-
+	static int m_difficultLevel;
+	static std::string m_name;
 	//void NextHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, tgui::Button::Ptr nextBtt, tgui::Button::Ptr stBtt);
 
 	//void LoadMenuGUI(tgui::Gui &gui);

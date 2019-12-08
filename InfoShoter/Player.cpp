@@ -1,21 +1,22 @@
-#include "player.h"
+#include "Player.h"
 //#include <cmath>
-
+//int Player::m_difficultLevel = 0;
 //#define M_PI 3.14159265358979323846
 
-Player::Player(sf::Vector2f startPosition) : m_boundingBox({ { sf::Vector2f(-35.f, -25.f), sf::Vector2f(-21.f, -25.f), sf::Vector2f(-35.f, -50.f), sf::Vector2f(-21.f, -50.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-35.f, 0.f) } }),
-Renderer(startPosition), m_expNeededToLevelUp(80), m_maxMana(10), m_swordDamageMultipler(1)
+Player::Player(sf::Vector2f startPosition, int difficult, std::string name) : m_boundingBox({ { sf::Vector2f(-35.f, -25.f), sf::Vector2f(-21.f, -25.f), sf::Vector2f(-35.f, -50.f), sf::Vector2f(-21.f, -50.f), sf::Vector2f(-21.f, 0.f), sf::Vector2f(-35.f, 0.f) } }),
+Renderer(startPosition), m_expNeededToLevelUp(80), m_maxMana(10), m_swordDamageMultipler(1),
+m_difficultLevel(difficult),m_name(name)
 {
-	m_speed = 5;
+	m_speed = 4 - m_difficultLevel;
 	m_maxSpeed = sf::Vector2f(50.f * m_speed, 50.f * m_speed);
 	m_maxSpeedInv = sf::Vector2f(-50.f * m_speed, -50.f * m_speed);
-	m_swordDamage = 5;
+	m_swordDamage = 7 - m_difficultLevel;
 	m_level = 1;
 	m_exp = 0;
 	m_skillpoints = 0;
 	m_magicPower = 0;
-	m_currentMagic = new Magic(1,11.f,1);
-	//m_currentMagic = nullptr;
+	//m_currentMagic = new Magic(1,11.f,1);
+	m_currentMagic = nullptr;
 	m_equipableMagic = nullptr;
 	m_mana = m_maxMana;
 	
@@ -311,5 +312,35 @@ void Player::Update(sf::Time & frameTime)
 float Player::GetMana()
 {
 	return m_mana;
+}
+
+std::string Player::GetDifficultLevel()
+{
+	//(m_difficultLevel == 0 ? "EASY" : (m_difficultLevel == 1) ? "NORMAL" : "HARD");
+	switch (m_difficultLevel) {
+	case 0:
+		return "EASY";
+		break;
+	case 1:
+		return "NORMAL";
+		break;
+	case 2:
+		return "HARD";
+		break;
+	default:
+		return "???";
+		break;
+	}
+}
+
+std::string Player::GetName()
+{
+	return m_name;
+}
+
+Score Player::GetScore()
+{
+	Score score = { m_name, GetDifficultLevel(), 0 , m_level , m_swordDamage , m_magicPower , m_speed};
+	return score;
 }
 

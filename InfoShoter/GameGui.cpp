@@ -1,5 +1,4 @@
 #include "GameGui.h"
-#include <sstream>
 
 template <typename T>
 std::string to_string_with_precision(const T a_value, const int n)
@@ -10,8 +9,12 @@ std::string to_string_with_precision(const T a_value, const int n)
 	return out.str();
 }
 
-GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int* waveNumber, sf::Time* frameTime) : m_frameTime(frameTime), m_player(player), m_timeBetweenWaves(timeBetweenWaves), m_waveNumber(waveNumber)
+GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int* waveNumber, sf::Time* frameTime, bool* isGameLost) : m_frameTime(frameTime), m_player(player), m_timeBetweenWaves(timeBetweenWaves), m_waveNumber(waveNumber), m_isGameLost(isGameLost)
 {
+	m_scoreDataFile.open("data.bin", std::ios::in | std::ios::binary );
+	m_scoreDataFile >> m_highScore;
+	std::cout << std::endl << m_highScore.wave <<std::endl;
+	m_scoreDataFile.close();
 	m_waveText = tgui::Label::create();
 	m_waveText->getRenderer()->setFont(tgui::Font::Font("../assets/IMMORTAL.ttf"));
 	m_waveText->getRenderer()->setBorders(5);
@@ -85,6 +88,27 @@ GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int
 	m_manaBar->setTextSize(18);
 	m_manaBar->setSize(300, 35);
 
+	m_gameOverTitle = tgui::Label::create();
+	m_gameOverTitle->setText("\n\t\t SOMEONE TOCHA MY FLOWA");
+	m_gameOverTitle->setPosition({ "5%" , "0%" });
+	m_gameOverTitle->getRenderer()->setTextOutlineThickness(2);
+	m_gameOverTitle->getRenderer()->setFont(tgui::Font::Font("../assets/KarmaFuture.ttf"));
+	m_gameOverTitle->getRenderer()->setTextColor(sf::Color(216, 123, 29, 255));
+	m_gameOverTitle->setTextSize(100);
+	m_gameOverTitle->setVisible(false);
+
+	m_gameOverText = tgui::Label::create();
+	m_gameOverText->setPosition({ "5%" , "5%" });
+	m_gameOverText->setSize({ "90%" , "90%" });
+	m_gameOverText->getRenderer()->setBackgroundColor(sf::Color(20, 20, 20, 230));
+	m_gameOverText->getRenderer()->setBorders(8);
+	m_gameOverText->getRenderer()->setTextOutlineThickness(2);
+	m_gameOverText->getRenderer()->setTextColor(sf::Color(230, 230, 230, 255));
+	m_gameOverText->getRenderer()->setFont(tgui::Font::Font("../assets/KarmaFuture.ttf"));
+	m_gameOverText->setTextSize(50);
+	m_gameOverText->setVisible(false);
+
+
 	gui.add(m_waveCounter);
 	gui.add(m_playerMainGui);
 	gui.add(m_experienceBar);
@@ -95,6 +119,8 @@ GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int
 	gui.add(m_magicReloadFilm);
 	gui.add(m_lootMagicGui);
 	gui.add(m_manaBar);
+	gui.add(m_gameOverText);
+	gui.add(m_gameOverTitle);
 
 	m_levelUpHelp = tgui::Label::create();
 	m_levelUpHelp->getRenderer()->setFont(tgui::Font::Font("../assets/IMMORTAL.ttf"));
@@ -169,6 +195,43 @@ void GameGui::Update()
 	}
 	else
 		HideLevelUpHelp();
+
+	if (*m_isGameLost && !m_gameOverText->isVisible()) { 
+		if (*(m_waveNumber) > m_highScore.wave) {
+			std::cout << std::endl << m_highScore.wave;
+			Score newHighScore = m_player->GetScore();
+			//std::cout <<std::endl<< newHighScore.attack;
+			newHighScore.wave = *m_waveNumber;
+			m_scoreDataFile.open("data.bin", std::ios::binary | std::ios::out | std::ios::trunc);
+			m_scoreDataFile << newHighScore;
+			m_scoreDataFile.close();
+			m_gameOverText->setText("\n\n\n\t\t\NEW HIGH SCORE\n"
+				"\t\t" + m_player->GetName() +
+				"\n\t\t" + m_player->GetDifficultLevel() +
+				"\n\t\t Your score"
+				"\n\t\t\tWave: " + std::to_string(*m_waveNumber + 1) +
+				"\n\t\t\tPlayer level: " + std::to_string(m_player->GetLevel()) +
+				"\n\t\t  Stats"
+				"\n\t\t\tAttack: " + std::to_string(m_player->GetDamage()) +
+				"\n\t\t\tMagic: " + std::to_string(m_player->GetMagicPower()) +
+				"\n\t\t\tSpeed: " + std::to_string(m_player->GetSpeed()));
+		}
+		else{
+			m_gameOverText->setText("\n\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tHigh Score\n"
+				"\t\t" + m_player->GetName() + "\t\t\t\t\t\t\t\t" + m_highScore.name +
+				"\n\t\t" + m_player->GetDifficultLevel() + "\t\t\t\t\t\t\t\t\t\t  " + m_highScore.difficulty +
+				"\n\t\t Your score"
+				"\n\t\t\tWave: " + std::to_string(*m_waveNumber + 1) + "\t\t\t\t\t\t\t\t\t\t\t" + std::to_string(m_highScore.wave) +
+				"\n\t\t\tPlayer level: " + std::to_string(m_player->GetLevel()) + "\t\t\t\t\t\t\t" + std::to_string(m_highScore.playerLevel) +
+				"\n\t\t  Stats"
+				"\n\t\t\tAttack: " + std::to_string(m_player->GetDamage()) + "\t\t\t\t\t\t\t\t\t   " + std::to_string(m_highScore.attack) +
+				"\n\t\t\tMagic: " + std::to_string(m_player->GetMagicPower()) + "\t\t\t\t\t\t\t\t\t\t " + std::to_string(m_highScore.magic) +
+				"\n\t\t\tSpeed: " + std::to_string(m_player->GetSpeed()) + "\t\t\t\t\t\t\t\t\t\t" + std::to_string(m_highScore.speed));
+		}
+		m_gameOverText->showWithEffect(tgui::ShowAnimationType::SlideFromBottom, sf::milliseconds(800));
+		m_gameOverTitle->showWithEffect(tgui::ShowAnimationType::SlideFromTop, sf::milliseconds(800));
+	}
+	//std::cout << m_isGameLost;
 }
 
 void GameGui::HideCounter()

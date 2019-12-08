@@ -29,8 +29,8 @@ Knight::Knight(std::queue<sf::Vector2f> path_, int level_) : Enemy(path_, level_
 
 	m_baseHealth = 150;
 	m_healthLevelMultipler = 40;
-	m_baseExp = 15;
-	m_expMultipler = 4;
+	m_baseExp = 20;
+	m_expMultipler = 7;
 	InitializeEnemy();
 	m_healthPoints = m_maxHealthPoints;
 }

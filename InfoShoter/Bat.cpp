@@ -26,8 +26,8 @@ Bat::Bat(std::queue<sf::Vector2f> path_,int level_) : Enemy(path_, level_) {
 	
 	m_baseHealth = 50;
 	m_healthLevelMultipler = 10;
-	m_baseExp = 10;
-	m_expMultipler = 2;
+	m_baseExp = 14;
+	m_expMultipler = 5;
 	InitializeEnemy();
 	m_healthPoints = m_maxHealthPoints;
 }

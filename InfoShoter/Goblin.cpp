@@ -29,8 +29,8 @@ Goblin::Goblin(std::queue<sf::Vector2f> path_, int level_) : Enemy(path_, level_
 
 	m_baseHealth = 70;
 	m_healthLevelMultipler = 14;
-	m_baseExp = 15;
-	m_expMultipler = 3;
+	m_baseExp = 17;
+	m_expMultipler = 6;
 	InitializeEnemy();
 	m_healthPoints = m_maxHealthPoints;
 }

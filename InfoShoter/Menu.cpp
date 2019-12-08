@@ -1,10 +1,10 @@
 #include "Menu.h"
-
 //void Menu::StartHandler(tgui::ListBox::Ptr listBox, tgui::EditBox::Ptr username, tgui::Button::Ptr nextBtt, tgui::Button::Ptr stBtt)
 //{
 //	cScreen::goNext = true;
 //}
-
+int Menu::m_difficultLevel = 1;
+std::string Menu::m_name = "abc";
 void Menu::SignalHandler(tgui::Widget::Ptr widget, const std::string& signalName, const sf::String& buttonText)
 {
 	if (buttonText.toAnsiString() == "Next") {
@@ -16,8 +16,15 @@ void Menu::SignalHandler(tgui::Widget::Ptr widget, const std::string& signalName
 		startButton->showWithEffect(tgui::ShowAnimationType::Fade, sf::milliseconds(800));
 	}
 	//std::cout << buttonText.toAnsiString();
-	else if (buttonText.toAnsiString() == "Start")
+	else if (buttonText.toAnsiString() == "Start") {
+		Menu::m_difficultLevel = listBox->getSelectedItemIndex();
+		if (editBoxUsername->getText().toAnsiString() != "")
+			Menu::m_name = editBoxUsername->getText().toAnsiString();
+		else
+			Menu::m_name = editBoxUsername->getDefaultText();
 		cScreen::goNext = true;
+
+	}
 	else if (buttonText.toAnsiString() == "Help") {
 		helpText->showWithEffect(tgui::ShowAnimationType::SlideFromBottom, sf::milliseconds(500));
 		helpCloseButton->showWithEffect(tgui::ShowAnimationType::SlideFromBottom, sf::milliseconds(500));
@@ -67,7 +74,7 @@ Menu::Menu(tgui::Gui &gui)
 	editBoxUsername = tgui::EditBox::create();
 	editBoxUsername->setSize({ "25%", "12.5%" });
 	editBoxUsername->setPosition({ "37.5%", "55%" });
-	editBoxUsername->setDefaultText("\t\t\tPlayer name");
+	editBoxUsername->setDefaultText("PlayerName");
 	editBoxUsername->setTextSize(38);
 	editBoxUsername->getRenderer()->setFont(tgui::Font::Font("../assets/KarmaFuture.ttf"));
 	gui.add(editBoxUsername);
@@ -90,6 +97,7 @@ Menu::Menu(tgui::Gui &gui)
 	listBox->getRenderer()->setSelectedBackgroundColorHover(sf::Color(150, 70, 0, 255));
 	listBox->setTextSize(38);
 	listBox->setItemHeight(45);
+	listBox->setSelectedItemByIndex(1);
 	gui.add(listBox);
 	listBox->setVisible(false);
 

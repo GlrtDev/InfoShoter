@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include "Magic.h"
-
+#include "Score.h"
 class Player
 {
 private:
@@ -27,11 +27,12 @@ private:
 	int m_maxMana;
 	float m_mana;
 	float m_swordDamageMultipler;
+	std::string m_name;
+	int m_difficultLevel;
 public:
 	std::array<sf::Vector2f, 6> m_boundingBox;
-
 	enum PlayerStates { UP, DOWN, RIGHT, LEFT, IDLE };
-	Player(sf::Vector2f startPosition);
+	Player(sf::Vector2f startPosition, int difficult, std::string name);
 	PlayerRenderer Renderer;
 	void Move(sf::Time &frameTime);
 	void SetAcceleration(PlayerStates direction, bool m_isAttacking, const std::string lastFacingSide);
@@ -56,4 +57,7 @@ public:
 	int GetManaPercentage();
 	void Update(sf::Time & frameTime);
 	float GetMana();
+	std::string GetDifficultLevel();
+	std::string GetName();
+	Score GetScore();
 };
