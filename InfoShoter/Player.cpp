@@ -267,7 +267,9 @@ void Player::AssignSkillpoints()
 			m_magicPower += 1; m_skillpoints--;
 			if(m_currentMagic != nullptr)
 				m_currentMagic->LevelUp();
-			m_maxMana *= 2; }
+			m_maxMana = 10 * m_magicPower * m_level;
+			m_mana = m_maxMana;
+		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) { 
 			m_speed += 1; m_skillpoints--;
 			m_maxSpeed = sf::Vector2f(50.f * m_speed, 50.f * m_speed);

@@ -14,7 +14,7 @@ Magic::Magic(int level, float seedAsFrameTimeSec, int playerMagicLevel) : m_proj
 	auto random2 = std::bind(randRangeForType, randomNumberGenerator);
 	m_type = random2();
 	m_name = magicNames[nameRange(randomNumberGenerator)];
-	m_damage = level * random1() * (1 + m_playerMagicLevel / 3.0) * (1 - (m_type / 6.f));
+	m_damage = level * (random1()+5) * (1 + m_playerMagicLevel / 3.0) * (1 - (m_type / 6.f));
 	m_speed = random1() * (1 + (m_type / 6.f)) * (1 + m_playerMagicLevel / 30.0);
 	m_manaCost = (m_damage + m_speed/4.f)*0.05f;
 	m_rechargeTime = 5*((float)m_damage/ ((float)m_speed * level * (m_playerMagicLevel + 1)));
@@ -126,7 +126,9 @@ std::vector<Projectile>* Magic::GetProjectiles()
 
 void Magic::LevelUp()
 {
-	m_damage *= 1.3f;
-	m_speed *= 1.1f;
+	m_damage *= (1 + m_playerMagicLevel / 3.0);
+	m_speed *=(1 + m_playerMagicLevel / 30.0);
+	m_manaCost = (m_damage + m_speed / 4.f)*0.05f;
+	m_rechargeTime -=  ( (1/(m_playerMagicLevel+1)) * m_rechargeTime );
 }
 

@@ -97,7 +97,7 @@ void Enemy::InitializeEnemy()
 {
 	m_maxHealthPoints = m_baseHealth + m_level * m_healthLevelMultipler * Enemy::m_levelMultipler;
 	m_exp = m_baseExp + m_level * m_expMultipler;
-	Enemy::m_levelMultipler *= 1.045f; // increase to increase difficulty
+	Enemy::m_levelMultipler *= 1.035f; // increase to increase difficulty
 }
 
 int Enemy::GetExp()
