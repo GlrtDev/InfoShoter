@@ -13,10 +13,10 @@ EnemyRenderer::EnemyRenderer()
 	m_minimapDot.setRadius(10.f);
 	m_minimapDot.setFillColor(sf::Color(255, 0, 0, 255));
 
-	for (int i = 0; i < 4; i++) {
+	/*for (int i = 0; i < 4; i++) {
 		m_boundingBoxDots[i].setRadius(2.f);
 		m_boundingBoxDots[i].setFillColor(sf::Color(255, 0, 0, 255));
-	}
+	}*/
 	//dead = false;
 }
 
@@ -36,8 +36,8 @@ void EnemyRenderer::Draw(sf::RenderWindow &window, sf::Time &frameTime)
 		window.draw(m_animatedSprite);
 		window.draw(m_healthBarBackground);
 		window.draw(m_healthBar);
-		for (int i = 0; i < 4; i++)
-			window.draw(m_boundingBoxDots[i]);
+		/*for (int i = 0; i < 4; i++)
+			window.draw(m_boundingBoxDots[i]);*/
 	}
 	catch(const std::out_of_range &err)
 	{

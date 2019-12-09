@@ -35,6 +35,6 @@ public:
 		return result;
 	}
 	static void CollisionDetection(Player& player, tmx::ObjectGroup collisionLayer,sf::Time frameTime, std::vector<Enemy> &enemiesLiving);
-	static std::queue<sf::Vector2f> initializePaths(std::queue<sf::Vector2f> *paths);
+	static void initializePaths(std::queue<sf::Vector2f> *paths);
 	
 };

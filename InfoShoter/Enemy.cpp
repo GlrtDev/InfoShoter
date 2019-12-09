@@ -7,7 +7,7 @@ std::vector<sf::Vector2f> Enemy::GetboundingBox()
 	return m_boundingBox;
 }
 
-Enemy::Enemy(std::queue<sf::Vector2f> path_,int level_) : m_path(path_) , m_level(level_)
+Enemy::Enemy(const std::queue<sf::Vector2f> path_,int level_) : m_path(path_) , m_level(level_)
 {
 	
 }

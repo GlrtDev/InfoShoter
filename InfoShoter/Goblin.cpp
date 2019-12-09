@@ -18,7 +18,7 @@ Goblin::Goblin(std::queue<sf::Vector2f> path_, int level_) : Enemy(path_, level_
 		m_walkingAnimationRight.addFrame(sf::IntRect(64 * i, 0, 64, 64));
 	m_velocity = 60.f;
 	sf::Vector2f startPosition(m_path.front());  m_path.pop();
-	m_positionOffset = sf::Vector2f(15.f, 15.f);
+	m_positionOffset = sf::Vector2f(5.f, 15.f);
 	m_animatedSprite.setPosition(startPosition + m_positionOffset);
 	m_currentAnimation = &m_walkingAnimationLeft;
 	m_animatedSprite.play(*m_currentAnimation);

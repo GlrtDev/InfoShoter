@@ -35,7 +35,7 @@ public:
 	Player(sf::Vector2f startPosition, int difficult, std::string name);
 	PlayerRenderer Renderer;
 	void Move(sf::Time &frameTime);
-	void SetAcceleration(PlayerStates direction, bool m_isAttacking, const std::string lastFacingSide);
+	void SetAcceleration(PlayerStates direction, bool m_isAttacking, const std::string &lastFacingSide);
 	void Resetm_velocityX();
 	void Resetm_velocityY();
 	void WallCollision(sf::Time &frameTime);

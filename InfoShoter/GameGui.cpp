@@ -11,6 +11,7 @@ std::string to_string_with_precision(const T a_value, const int n)
 
 GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int* waveNumber, sf::Time* frameTime, bool* isGameLost) : m_frameTime(frameTime), m_player(player), m_timeBetweenWaves(timeBetweenWaves), m_waveNumber(waveNumber), m_isGameLost(isGameLost)
 {
+	m_gamestate = Game;
 	m_scoreDataFile.open("data.bin", std::ios::in | std::ios::binary );
 	m_scoreDataFile >> m_highScore;
 	std::cout << std::endl << m_highScore.wave <<std::endl;
@@ -108,6 +109,19 @@ GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int
 	m_gameOverText->setTextSize(50);
 	m_gameOverText->setVisible(false);
 
+	m_quitGameScreen = tgui::Label::create();
+	m_quitGameScreen->setPosition({ "27.5%" , "27.5%" });
+	m_quitGameScreen->setSize({ "45%" , "45%" });
+	m_quitGameScreen->setText("\n\t\t\tYou sure wanna exit?\n\n"
+	"\t[Backspace] NO\t [Enter] YES"
+	"\n\n\t\t\t\t\t\t[M] Menu");
+	m_quitGameScreen->getRenderer()->setBackgroundColor(sf::Color(20, 20, 20, 230));
+	m_quitGameScreen->getRenderer()->setBorders(8);
+	m_quitGameScreen->getRenderer()->setTextOutlineThickness(2);
+	m_quitGameScreen->getRenderer()->setTextColor(sf::Color(230, 230, 230, 255));
+	m_quitGameScreen->getRenderer()->setFont(tgui::Font::Font("../assets/KarmaFuture.ttf"));
+	m_quitGameScreen->setTextSize(50);
+	m_quitGameScreen->setVisible(false);
 
 	gui.add(m_waveCounter);
 	gui.add(m_playerMainGui);
@@ -121,6 +135,7 @@ GameGui::GameGui(tgui::Gui &gui, Player* player,sf::Clock* timeBetweenWaves, int
 	gui.add(m_manaBar);
 	gui.add(m_gameOverText);
 	gui.add(m_gameOverTitle);
+	gui.add(m_quitGameScreen);
 
 	m_levelUpHelp = tgui::Label::create();
 	m_levelUpHelp->getRenderer()->setFont(tgui::Font::Font("../assets/IMMORTAL.ttf"));
@@ -217,7 +232,7 @@ void GameGui::Update()
 				"\n\t\t\tSpeed: " + std::to_string(m_player->GetSpeed()));
 		}
 		else{
-			m_gameOverText->setText("\n\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\tHigh Score\n"
+			m_gameOverText->setText("\n\n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tHigh Score\n"
 				"\t\t" + m_player->GetName() + "\t\t\t\t\t\t\t\t" + m_highScore.name +
 				"\n\t\t" + m_player->GetDifficultLevel() + "\t\t\t\t\t\t\t\t\t\t  " + m_highScore.difficulty +
 				"\n\t\t Your score"
@@ -230,6 +245,22 @@ void GameGui::Update()
 		}
 		m_gameOverText->showWithEffect(tgui::ShowAnimationType::SlideFromBottom, sf::milliseconds(800));
 		m_gameOverTitle->showWithEffect(tgui::ShowAnimationType::SlideFromTop, sf::milliseconds(800));
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && !m_quitGameScreen->isVisible()) {
+		m_quitGameScreen->setVisible(true);
+	}
+	else {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
+			m_quitGameScreen->setVisible(false);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+			m_gamestate = Quit;
+			std::cout << "chuj";
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)) {
+			m_gamestate = Menu;
+		}
 	}
 	//std::cout << m_isGameLost;
 }
@@ -253,3 +284,10 @@ void GameGui::HideLevelUpHelp()
 {
 	m_levelUpHelp->setVisible(false);
 }
+
+int GameGui::StateMonitor()
+{
+	return m_gamestate;
+}
+
+

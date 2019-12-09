@@ -40,14 +40,14 @@ void Projectile::Move(sf::Time & frameTime)
 		m_animatedSprite.move(-m_speed * frameTime.asSeconds(), 0);
 	}
 	lifeTime += frameTime;
-	if (lifeTime.asSeconds() > m_speed) {
+	if (lifeTime.asSeconds() > m_speed/2) {
 		lifeTime = sf::Time::Zero;
 		m_readyToDie = true;
 	}
 }
 
 // TO DO move this to particleRenderer
-void Projectile::SetDirection(const std::string FacingSide, sf::Vector2f startPosition) {
+void Projectile::SetDirection(const std::string &FacingSide, sf::Vector2f startPosition) {
 	m_facingSide = FacingSide;
 	m_animatedSprite.setPosition(startPosition);
 	if (m_type != 2) {
@@ -86,13 +86,13 @@ sf::Vector2f Projectile::GetCollisionPoint()
 	}
 	else {
 		if (m_facingSide == "UP")
-			offset = m_type ? sf::Vector2f(30, -50) : sf::Vector2f(30, -60);
+			offset = m_type ? sf::Vector2f(30, -45) : sf::Vector2f(30, -55);
 		else if (m_facingSide == "DOWN")
-			offset = m_type ? sf::Vector2f(-34, 45) : sf::Vector2f(-34, 55);
+			offset = m_type ? sf::Vector2f(-34, 40) : sf::Vector2f(-34, 50);
 		else if (m_facingSide == "LEFT")
-			offset = m_type ? sf::Vector2f(-50, -35) : sf::Vector2f(-60, -35);
+			offset = m_type ? sf::Vector2f(-45, -35) : sf::Vector2f(-55, -35);
 		else					//RIGHT
-			offset = m_type ? sf::Vector2f(45, 30) : sf::Vector2f(55, 30);
+			offset = m_type ? sf::Vector2f(40, 30) : sf::Vector2f(50, 30);
 	}
 	return m_animatedSprite.getPosition() + offset; 
 }

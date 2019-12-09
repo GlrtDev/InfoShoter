@@ -4,7 +4,7 @@ class Knight :
 	public Enemy
 {
 public:
-	Knight(std::queue<sf::Vector2f> path_, int level_);
+	Knight(const std::queue<sf::Vector2f> path_, int level_);
 	~Knight();
 };
 

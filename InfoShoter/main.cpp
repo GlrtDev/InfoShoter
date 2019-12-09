@@ -12,14 +12,14 @@ int main()
 	std::vector<cScreen*> Screens;
 	int screen = 0;
 
-	sf::RenderWindow window(sf::VideoMode(1920, 1080), "InfoShoter"); //sf::Style::Fullscreen 
+	sf::RenderWindow window(sf::VideoMode(1920, 1080), "InfoShoter", sf::Style::Fullscreen); //sf::Style::Fullscreen 
 	window.setVerticalSyncEnabled(true);
 
 	
 	MenuScreen menuScreen;
 	Screens.push_back(&menuScreen); //Add menuSC to Screens
 	GameScreen gameScreen;
-	Screens.push_back(&gameScreen); //Add menuSC to Screens
+	Screens.push_back(&gameScreen); //Add gameSC to Screens
 
 	while (screen >= 0) //main loop
 	{

@@ -4,7 +4,7 @@ class Roque :
 	public Enemy
 {
 public:
-	Roque(std::queue<sf::Vector2f> path_, int level_);
+	Roque(const std::queue<sf::Vector2f> path_, int level_);
 	~Roque();
 };
 

@@ -23,7 +23,7 @@ protected:
 	//bool alive;
 public:
 	
-	Enemy(std::queue<sf::Vector2f> path_,int level_);
+	Enemy(const std::queue<sf::Vector2f> path_,int level_);
 	~Enemy();
 
 	bool Move(sf::Vector2f targetPosition, sf::Time &frameTime);

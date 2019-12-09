@@ -1,6 +1,6 @@
 #include "Bat.h"
 
-Bat::Bat(std::queue<sf::Vector2f> path_,int level_) : Enemy(path_, level_) {
+Bat::Bat(const std::queue<sf::Vector2f> path_,int level_) : Enemy(path_, level_) {
 	if (!m_texture.loadFromFile("../Sprites/EnemySprites/eye monster idle.png"))
 	{
 		std::cout << "Failed to load bat moster spritesheet!" << std::endl;

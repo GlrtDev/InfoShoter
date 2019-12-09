@@ -14,7 +14,7 @@ public:
 	Projectile(int damage, int speed,int type,sf::Color ProjectileColor);
 	~Projectile();
 	void Move(sf::Time &frameTime);
-	void SetDirection(const std::string FacingSide, sf::Vector2f startPosition);
+	void SetDirection(const std::string &FacingSide, sf::Vector2f startPosition);
 	bool CheckStatus();
 	sf::Vector2f GetCollisionPoint();
 	int GetDamage();

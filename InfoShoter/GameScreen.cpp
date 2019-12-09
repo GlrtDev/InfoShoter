@@ -25,13 +25,13 @@ GameScreen::GameScreen(void) : m_playing(true) {};
 
 int GameScreen::Run(sf::RenderWindow &window) {
 	std::queue<sf::Vector2f> path[3];
-	*path = EventHandler::initializePaths(path);
-	sf::Vector2f flowerPosition(660.f, 470.f);
+	EventHandler::initializePaths(path);
+	const sf::Vector2f flowerPosition(660.f, 470.f);
 	sf::View view;
 	view.setViewport(sf::FloatRect(0.f, 0.f, 2.25f, 4.f)); // 9:16
 	sf::View miniMap;
 	miniMap.setViewport(sf::FloatRect(0.f, 0.75f, 0.25f, 0.25f)); // 9:16
-	sf::Vector2f cameraCorrection(310.f, 400.f);
+	const sf::Vector2f cameraCorrection(310.f, 400.f);
 	bool gameHasEnded = false;
 	bool Running = true;
 	sf::Event Event;
@@ -66,7 +66,7 @@ int GameScreen::Run(sf::RenderWindow &window) {
 	sf::Time frameTime;
 	sf::Time timeElapsed = sf::Time::Zero;
 
-	sf::Vector2f startPosition(350.f, 300.f);
+	const sf::Vector2f startPosition(350.f, 300.f);
 	Player player(startPosition, Menu::m_difficultLevel ,Menu::m_name);
 
 	// TO DO, make separate class from this
@@ -200,6 +200,11 @@ int GameScreen::Run(sf::RenderWindow &window) {
 		}
 
 		gameGui.Update();
+		int runningState = gameGui.StateMonitor();
+		if (runningState != 1)
+		{
+			return runningState; //change game state
+		}
 		window.clear(sf::Color::Black);
 
 		window.setView(view);

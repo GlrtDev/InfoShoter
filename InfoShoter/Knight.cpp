@@ -24,7 +24,7 @@ Knight::Knight(std::queue<sf::Vector2f> path_, int level_) : Enemy(path_, level_
 	m_animatedSprite.play(*m_currentAnimation);
 	m_animatedSprite.setScale(sf::Vector2f(1.8f, 1.8f));
 	m_healthBarOffset = sf::Vector2i(28, 72);
-	m_boundingBox = { sf::Vector2f(10.f,15.f),sf::Vector2f(70.f,70.f),sf::Vector2f(10.f,70.f), sf::Vector2f(70.f,15.f) };
+	m_boundingBox = { sf::Vector2f(7.f,15.f),sf::Vector2f(70.f,70.f),sf::Vector2f(7.f,70.f), sf::Vector2f(70.f,15.f) };
 	m_minimapOffset = sf::Vector2f(35.f, 35.f);
 
 	m_baseHealth = 150;

@@ -38,7 +38,7 @@ void Player::Move(sf::Time &frameTime)
 	Renderer.Move(m_velocity, frameTime);
 }
 
-void Player::SetAcceleration(PlayerStates direction, bool isAttacking, const std::string lastFacingSide)
+void Player::SetAcceleration(PlayerStates direction, bool isAttacking, const std::string &lastFacingSide)
 {
 	float speed = m_speed;
 	switch (direction)

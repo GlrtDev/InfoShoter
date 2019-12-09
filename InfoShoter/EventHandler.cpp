@@ -89,7 +89,7 @@ void EventHandler::CollisionDetection(Player & player, tmx::ObjectGroup collisio
 	}
 }
 
-std::queue<sf::Vector2f> EventHandler::initializePaths(std::queue<sf::Vector2f>* paths)
+void EventHandler::initializePaths(std::queue<sf::Vector2f>* paths)
 {
 	paths[0].push(sf::Vector2f(782.f, 600.f));	
 	paths[0].push(sf::Vector2f(179.f, 600.f));
@@ -118,5 +118,4 @@ std::queue<sf::Vector2f> EventHandler::initializePaths(std::queue<sf::Vector2f>*
 	paths[2].push(sf::Vector2f(453.f, 276.f));
 	paths[2].push(sf::Vector2f(363.f, 276.f));
 	paths[2].push(sf::Vector2f(363.f, 76.f));
-	return *paths;
 }

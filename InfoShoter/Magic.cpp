@@ -39,7 +39,7 @@ Magic::~Magic()
 {
 }
 
-bool Magic::ShotProjectile(const std::string lastFacingSide, sf::Vector2f startPosition)
+bool Magic::ShotProjectile(const std::string &lastFacingSide, sf::Vector2f startPosition)
 {
 	if (m_projectileLoaded) {
 		projectile->SetDirection(lastFacingSide, startPosition);

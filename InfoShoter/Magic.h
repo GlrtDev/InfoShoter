@@ -23,7 +23,7 @@ class Magic
 public:
 	Magic(int level, float seedAsFrameTimeSec, int playerMagicLevel);
 	~Magic();
-	bool ShotProjectile(const std::string lastFacingSide,sf::Vector2f startPosition);
+	bool ShotProjectile(const std::string &lastFacingSide,sf::Vector2f startPosition);
 	void DrawProjectiles(sf::RenderWindow & window, sf::Time & frameTime);
 	std::string GetName();
 	int GetDamage();
