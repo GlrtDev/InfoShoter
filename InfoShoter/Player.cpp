@@ -263,7 +263,11 @@ void Player::AssignSkillpoints()
 {
 	if (m_skillpoints > 0) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) { m_swordDamageMultipler += 0.5f; m_skillpoints--; }
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) { m_magicPower += 1; m_skillpoints--; m_currentMagic->LevelUp(); m_maxMana *= 2; }
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) { 
+			m_magicPower += 1; m_skillpoints--;
+			if(m_currentMagic != nullptr)
+				m_currentMagic->LevelUp();
+			m_maxMana *= 2; }
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) { 
 			m_speed += 1; m_skillpoints--;
 			m_maxSpeed = sf::Vector2f(50.f * m_speed, 50.f * m_speed);
