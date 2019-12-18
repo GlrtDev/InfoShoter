@@ -24,6 +24,7 @@
 GameScreen::GameScreen(void) : m_playing(true) {};
 
 int GameScreen::Run(sf::RenderWindow &window) {
+	m_playing = true;
 	std::queue<sf::Vector2f> path[3];
 	EventHandler::initializePaths(path);
 	const sf::Vector2f flowerPosition(660.f, 470.f);
@@ -33,6 +34,7 @@ int GameScreen::Run(sf::RenderWindow &window) {
 	miniMap.setViewport(sf::FloatRect(0.f, 0.75f, 0.25f, 0.25f)); // 9:16
 	const sf::Vector2f cameraCorrection(310.f, 400.f);
 	bool gameHasEnded = false;
+	bool paused = false;
 	bool Running = true;
 	sf::Event Event;
 	tgui::Gui gui{ window };
@@ -73,6 +75,7 @@ int GameScreen::Run(sf::RenderWindow &window) {
 	// Enemy::InitialLoad();
 	std::vector<Enemy> enemiesLiving;
 	std::vector<Enemy> enemySpawnQueue;
+	enemiesLiving.clear(); enemySpawnQueue.clear();
 	bool waveStarted = false;
 	bool wavePrepared = false;
 	int waveNumber = 0;
@@ -100,11 +103,13 @@ int GameScreen::Run(sf::RenderWindow &window) {
 					Event.key.code == sf::Keyboard::D) {
 					player.Resetm_velocityX();
 				}
+				if (Event.key.code == sf::Keyboard::P)
+					paused = !paused;
 			}
 			gui.handleEvent(Event);
 		}
 		frameTime = frameClock.restart();
-		if (m_playing) {
+		if (m_playing && !paused) {
 			view.setCenter(player.Renderer.GetPosition() + cameraCorrection);
 			miniMap.setCenter(player.Renderer.GetPosition());
 			// std::cout << std::endl << player.Renderer.GetPosition().x<<" " <<
@@ -177,7 +182,7 @@ int GameScreen::Run(sf::RenderWindow &window) {
 			}
 
 			for (auto &liveEnemy : enemiesLiving) {
-				liveEnemy.FollowPath(frameTime, m_playing);
+				liveEnemy.FollowPath(frameTime, m_playing); //inside is method to checking if enemy touched flower
 			}
 			// std::cout << waveStarted;
 			sf::Time duration = globalClock.getElapsedTime();
@@ -187,7 +192,7 @@ int GameScreen::Run(sf::RenderWindow &window) {
 				enemiesLiving); // walls collisions
 								// COLLISION DETECT END
 		}
-		else {
+		else if (m_playing && !paused){
 			sf::Vector2f newPosition = view.getCenter();
 			sf::Vector2f delta;
 			timeElapsed += frameTime;
@@ -198,6 +203,8 @@ int GameScreen::Run(sf::RenderWindow &window) {
 				gameHasEnded = true;
 			view.setCenter(newPosition);
 		}
+		else if ( paused )
+		{ }
 
 		gameGui.Update();
 		int runningState = gameGui.StateMonitor();

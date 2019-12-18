@@ -44,6 +44,5 @@ BlobSlime::~BlobSlime()
 void BlobSlime::Draw(sf::RenderWindow & window, sf::Time & frameTime) //TODO it didnt work, ask someone why
 {
 	sf::Time frameTime2 = frameTime * 5.f;
-	std::cout << "dupa";
 	Enemy::Draw(window, frameTime2);
 }

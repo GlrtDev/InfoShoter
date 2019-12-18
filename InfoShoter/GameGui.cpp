@@ -256,7 +256,6 @@ void GameGui::Update()
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
 			m_gamestate = Quit;
-			std::cout << "chuj";
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)) {
 			m_gamestate = Menu;

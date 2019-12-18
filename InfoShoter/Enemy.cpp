@@ -18,13 +18,15 @@ Enemy::~Enemy()
 }
 
 bool Enemy::Move(sf::Vector2f targetPosition, sf::Time &frameTime) {
-	
+	static int side;
 	bool targetReached = false;
 	sf::Vector2f delta,movement;
 	targetPosition += m_positionOffset;
 	delta.x = targetPosition.x - m_animatedSprite.getPosition().x;
 	delta.y = targetPosition.y - m_animatedSprite.getPosition().y;
-	int side = (delta.x > 0) ? 1 : ( (delta.x < 0 ) ? -1 : 0 );
+
+	if(fabs(delta.x)!=0)
+	side = (delta.x > 0) ? 1 : ( (delta.x < 0 ) ? -1 : 0 );
 
 	float movex = 0.f, movey = 0.f;
 	if (fabs(delta.x) > fabs(delta.y)) { //move horizontally
@@ -37,6 +39,7 @@ bool Enemy::Move(sf::Vector2f targetPosition, sf::Time &frameTime) {
 		}
 	}
 	else { //move vertically
+		ChangeAnimation(side);
 		movey = m_velocity * ((delta.y > 0) ? 1 : -1);
 		if (fabs(delta.y) <= 1.f) {
 			m_animatedSprite.setPosition(targetPosition);
@@ -49,8 +52,8 @@ bool Enemy::Move(sf::Vector2f targetPosition, sf::Time &frameTime) {
 	m_animatedSprite.move(movement * frameTime.asSeconds());
 	m_healthBar.setPosition(m_animatedSprite.getPosition().x + m_healthBarOffset.x, m_animatedSprite.getPosition().y + m_healthBarOffset.y);
 	m_healthBarBackground.setPosition(m_animatedSprite.getPosition().x + m_healthBarOffset.x, m_animatedSprite.getPosition().y + m_healthBarOffset.y);
-	for (int i = 0; i < 4; i++) 
-		m_boundingBoxDots[i].setPosition(m_animatedSprite.getPosition() + m_boundingBox[i]);
+	//for (int i = 0; i < 4; i++) 
+	//	m_boundingBoxDots[i].setPosition(m_animatedSprite.getPosition() + m_boundingBox[i]);
 	return targetReached;
 }
 

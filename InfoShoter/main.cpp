@@ -12,7 +12,7 @@ int main()
 	std::vector<cScreen*> Screens;
 	int screen = 0;
 
-	sf::RenderWindow window(sf::VideoMode(1920, 1080), "InfoShoter", sf::Style::Fullscreen); //sf::Style::Fullscreen 
+	sf::RenderWindow window(sf::VideoMode(1920, 1080), "InfoShoter", sf::Style::Default); //sf::Style::Fullscreen 
 	window.setVerticalSyncEnabled(true);
 
 	

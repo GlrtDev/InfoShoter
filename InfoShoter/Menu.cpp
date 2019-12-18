@@ -43,9 +43,8 @@ void Menu::SignalHandler(tgui::Widget::Ptr widget, const std::string& signalName
 Menu::Menu(tgui::Gui &gui)
 {
 	/*if (!texture1.loadFromFile("../Sprites/Female Student 1/femalestudent1.png"))
-		std::cout << "chuj";
 	if (!texture2.loadFromFile("../Sprites/Female Student 2/femalestudent2.png"))
-		std::cout << "dupa";
+		
 
 	picture = tgui::Picture::create(texture1);
 	picture->setSize({ "50%","100%" });
@@ -138,7 +137,7 @@ Menu::Menu(tgui::Gui &gui)
 	helpText->getRenderer()->setFont(tgui::Font::Font("../assets/KarmaFuture.ttf"));
 	helpText->setText("\n\n\n\n\t\t\t MOVE\t\t\t\t ATTACK\n\t\t[W] up\t\t\t\t[I] sword attack\n\t\t[S] down\t\t   [O] shot magic projectile\n\t\t[A] left\n\t\t[D] right"
 		"\n\n\nYou have to defend your flower. Enemies can't hurt you. Kill them before they go to the flower.\n\n\t\t\t\tSometimes they drop some magic. Click [E] to equip that magic or [Q] to dismiss.\n\n"
-	"When you kill enemy you got experience. After getting a certain number of Experience you can \t\t\t\t\t\t\tlevel up. Click [1] [2] or [3] to increase one of your attributes");
+	"When you kill enemy you got experience. After getting a certain number of Experience you can \t\t\t\t\t\t\tlevel up. Click [1] [2] or [3] to increase one of your attributes\n\n\t\t\t\t\t\t\t [P] Pause");
 	helpText->setTextSize(35);
 	helpText->setVisible(false);
 	gui.add(helpText);

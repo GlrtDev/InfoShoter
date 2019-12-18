@@ -13,15 +13,7 @@ int MenuScreen::Run(sf::RenderWindow & window)
 	sf::Event Event;
 	tgui::Gui gui{ window };
 	Menu menu(gui);
-	try
-	{
-		//menu.LoadMenuGUI(gui);
-	}
-	catch (const tgui::Exception& e)
-	{
-		std::cerr << "Failed to load Menu: " << e.what() << std::endl;
-		return 1;
-	}
+	
 
 	while (Running)
 	{

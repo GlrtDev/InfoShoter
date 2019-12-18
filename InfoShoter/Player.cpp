@@ -36,6 +36,9 @@ void Player::Move(sf::Time &frameTime)
 
 	m_velocity += m_acceleration;
 	Renderer.Move(m_velocity, frameTime);
+
+	if(m_currentMagic!=nullptr)
+		m_currentMagic->UpdateProjectiles(frameTime);
 }
 
 void Player::SetAcceleration(PlayerStates direction, bool isAttacking, const std::string &lastFacingSide)
@@ -191,10 +194,11 @@ void Player::Control()
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
 	{
-		if (m_currentMagic != nullptr)
-			if (m_currentMagic->GetManaCost() <= m_mana)	
-				if(m_currentMagic->ShotProjectile(lastFacingSide, Renderer.GetPosition()))
+		if (m_currentMagic != nullptr) 
+			if (m_currentMagic->GetManaCost() <= m_mana)
+				if (m_currentMagic->ShotProjectile(lastFacingSide, Renderer.GetPosition()))
 					m_mana -= m_currentMagic->GetManaCost();
+		
 
 	}
 
@@ -210,6 +214,7 @@ void Player::Control()
 		}
 	}
 	//TO DO make this look good
+
 	Renderer.PlayAnimation();
 	AssignSkillpoints();
 }
@@ -312,7 +317,7 @@ int Player::GetManaPercentage()
 void Player::Update(sf::Time & frameTime)
 {
 	if (m_mana < m_maxMana)
-		m_mana += frameTime.asSeconds()*(m_maxMana/(8.f - m_swordDamage* 0.1f));
+		m_mana += frameTime.asSeconds()*(m_maxMana + m_swordDamage * 0.1f )/(8.f);
 }
 
 float Player::GetMana()

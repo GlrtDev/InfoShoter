@@ -35,5 +35,6 @@ public:
 	int CalculateRecharge(sf::Time & frameTime);
 	std::vector<Projectile>* GetProjectiles();
 	void LevelUp();
+	void UpdateProjectiles(sf::Time & frameTime);
 };
 
